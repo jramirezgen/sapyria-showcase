@@ -19,6 +19,14 @@ Con la pila de contenedores, Caddy publica el showcase en `/` y conserva la API
 en `/v1/*`, `/healthz` y las rutas de documentación. La interfaz está montada en
 modo sólo lectura; editar la cohorte desde el navegador no forma parte del demo.
 
+## Dominio público
+
+La publicación de GitHub Pages usa `sapyria.com`. En el proveedor DNS, configure
+los registros de apex que GitHub Pages publica oficialmente y el `CNAME`
+`www → jramirezgen.github.io`; después active HTTPS desde la configuración de
+Pages cuando el certificado esté emitido. No sustituya los NS del dominio sólo
+para publicar esta página.
+
 ## Conectar Supabase (sólo sandbox)
 
 1. Use un proyecto o esquema de demostración aislado de cualquier entorno
