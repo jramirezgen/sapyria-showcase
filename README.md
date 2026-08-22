@@ -1,9 +1,23 @@
-# Sapyria Platform Demo
+# Sapyria Showcase
 
 Primera versión de producto de Sapyria para explicar su enfoque de fenotipo
 molecular y permitir a una persona explorar una muestra **sintética** en un
 espacio privado. Vercel despliega este repositorio directamente; no se crea ni
 gestiona otro hosting.
+
+## Frontera del repositorio
+
+Este es el **único repositorio de interfaz web pública** de Sapyria. Es dueño de
+`https://www.sapyria.com`, `https://sapyria.com` y del deployment de Vercel
+`sapyria-showcase`. No debe duplicarse dentro de `sapyria-platform` ni de los
+pipelines.
+
+`sapyria-platform` es el backend privado de metadatos operativos, auditoría y
+artefactos; `smallrna-clinical-pipeline` y `sapyria` son repositorios técnicos
+de análisis y gobierno de datos. Esta web puede consumir contratos públicos y
+resultados resumidos, pero nunca datos ómicos primarios, identificadores reales
+ni secretos. La decisión y el mapa completo quedan registrados en la LLM Wiki:
+[[Sapyria - Fronteras Canónicas de Repositorios y Despliegue]].
 
 ## Arquitectura
 
