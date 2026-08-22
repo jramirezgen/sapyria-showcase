@@ -1,67 +1,67 @@
-# Sapyria Showcase
+# Sapyria Platform Demo
 
-Experiencia de demostración local para conversaciones comerciales. Presenta casos
-**sintéticos**, no clínicos, de small RNA-seq, WES y WGS; no procesa muestras ni
-emite diagnósticos.
+Primera versión de producto de Sapyria para explicar su enfoque de fenotipo
+molecular y permitir a una persona explorar una muestra **sintética** en un
+espacio privado. Vercel despliega este repositorio directamente; no se crea ni
+gestiona otro hosting.
 
-## Ejecutar localmente
+## Arquitectura
 
-```bash
-cd showcase
-cp config.example.js config.js
-python3 -m http.server 4173
-```
+| Capa | Uso |
+| --- | --- |
+| Next.js + Vercel | Página pública, login y dashboard protegido. |
+| Supabase Auth | Google OAuth y correo/contraseña. |
+| Supabase PostgreSQL | Perfiles, estados de muestra y resultados demo resumidos. |
+| Infraestructura local | small RNA-seq, WES, WGS y todos los artefactos pesados. |
 
-Abrir `http://localhost:4173`. Sin `config.js` el sitio usa la cohorte sintética
-incluida, por lo que sigue siendo navegable en reuniones sin red.
+Supabase no recibe FASTQ, BAM, CRAM, VCF completos ni informes clínicos. El
+dashboard tampoco formula diagnósticos: presenta señal, inferencia, evidencia y
+limitaciones como capas distintas.
 
-Con la pila de contenedores, Caddy publica el showcase en `/` y conserva la API
-en `/v1/*`, `/healthz` y las rutas de documentación. La interfaz está montada en
-modo sólo lectura; editar la cohorte desde el navegador no forma parte del demo.
+## Configuración de Supabase
 
-## Dominio público
+1. En el SQL Editor del proyecto `Sapyria_platform`, ejecute
+   [`supabase/001_product_demo.sql`](supabase/001_product_demo.sql).
+2. En Authentication, habilite Google y Email. Para Google, agregue estas URLs
+   de redirección:
 
-La publicación de GitHub Pages usa `sapyria.com`. En el proveedor DNS, configure
-los registros de apex que GitHub Pages publica oficialmente y el `CNAME`
-`www → jramirezgen.github.io`; después active HTTPS desde la configuración de
-Pages cuando el certificado esté emitido. No sustituya los NS del dominio sólo
-para publicar esta página.
-
-## Conectar Supabase (sólo sandbox)
-
-1. Use un proyecto o esquema de demostración aislado de cualquier entorno
-   clínico.
-2. Cree y cargue la cohorte de forma reproducible, sin exponer la URL de base
-   de datos:
-
-   ```bash
-   python3 -m pip install --target /tmp/sapyria-showcase-deps -r supabase/requirements.txt
-   PYTHONPATH=/tmp/sapyria-showcase-deps python3 supabase/seed_showcase.py \
-     --credential-file ../credenciales_supabase_sapyria
+   ```text
+   https://sapyria.com/auth/callback
+   https://www.sapyria.com/auth/callback
+   https://sapyria-showcase.vercel.app/auth/callback
    ```
 
-3. Copie `config.example.js` como `config.js` y complete `url` y `anonKey` con
-   los valores locales de `credenciales_supabase_sapyria`. `config.js` está en
-   `.gitignore`; nunca se versiona.
-4. Mantenga RLS activado. La política incluida expone únicamente filas marcadas
-   como `is_public_demo = true`; no use una service-role key en el navegador.
+3. En Vercel → `sapyria-showcase` → Environment Variables, cargue para
+   Production, Preview y Development las dos variables de [`.env.example`](.env.example):
 
-El cliente consulta Supabase REST directamente y vuelve al dataset local si el
-servicio no está disponible. Eso hace que el demo sea robusto, pero la UI muestra
-de forma explícita qué fuente está activa.
+   ```text
+   NEXT_PUBLIC_SUPABASE_URL
+   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+   ```
 
-Si Supabase devuelve 401 para la clave publishable, renuévela en el dashboard
-del proyecto. Nunca sustituya esa clave por una `sb_secret_*`: esa llave sólo
-se usa para administración del servidor.
+   Son valores públicos de cliente. Nunca cargue una clave `sb_secret_*`, una
+   service-role key ni una URL de PostgreSQL en Vercel o el navegador.
 
-## Límite de producto
+La función `claim_demo_sample()` crea de forma idempotente una muestra demo
+aislada por usuario autenticado. Las políticas RLS impiden leer perfiles,
+muestras o resultados de otros usuarios.
 
-- `small RNA-seq`: señal investigacional y generación de hipótesis, no
-  diagnóstico ni biomarcador clínicamente validado.
-- `WES`: priorización técnica de variantes; requiere revisión clínica para
-  cualquier decisión asistencial.
-- `WGS`: vista de diseño/piloto. No afirma capacidad clínica para SV, CNV,
-  mitocondrial, expansiones ni mosaicismo.
+## Desarrollo local
 
-No añada identificadores personales, FASTQ/BAM/VCF reales, informes reales ni
-credenciales al directorio `showcase/`.
+```bash
+cp .env.example .env.local
+npm install
+npm run dev
+```
+
+El build de producción se verifica con `npm run build`.
+
+## Alcance de lenguaje
+
+- **small RNA-seq:** recuperación de hipótesis sustentadas, no clasificación
+  diagnóstica ni biomarcador clínicamente validado.
+- **WES:** priorización técnica que requiere revisión clínica independiente.
+- **WGS:** sólo dentro del alcance técnico explícito de cada piloto.
+
+La página y el dashboard son una demo funcional de producto; no sustituyen la
+operación clínica ni procesan muestras reales.
