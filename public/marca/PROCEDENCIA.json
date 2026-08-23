@@ -1,0 +1,20 @@
+{
+  "origen": "/home/kaitokid/Documents/REPOSITORIOS/sapyria/logo_sapyria.png (2048x2048, lienzo opaco RGB [253.3000030517578, 253.89999389648438, 252.6999969482422])",
+  "metodo": "quitado de fondo por luminancia con suelo de ruido; sin redibujar, sin filtros, sin recolorear",
+  "umbrales": {
+    "ruido": 28.0,
+    "pleno": 70.0
+  },
+  "fidelidad": {
+    "tinta_maxima_255": 0.0,
+    "tinta_media_255": 0.0,
+    "global_maxima_255": 27.0
+  },
+  "teal_medido_simbolo": "#1d797d",
+  "tinta_medida_logotipo": "#192223",
+  "manual": {
+    "teal": "#257F80",
+    "tinta": "#002626"
+  },
+  "estado": "PENDIENTE DE APROBACION del propietario: el manual exige aprobar la versión transparente contra el original"
+}

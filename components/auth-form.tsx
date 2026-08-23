@@ -63,7 +63,9 @@ export function AuthForm({ avisoInicial = null }: { avisoInicial?: string | null
   const campo =
     "mt-1.5 w-full rounded-lg border px-3 py-2.5 text-sm outline-none transition-colors " +
     "focus:border-[var(--accent)]";
-  const estiloCampo = { borderColor: "var(--border)", background: "var(--surface-0)", color: "var(--ink-1)" };
+  // `--border-strong`, no `--border`: en un campo de formulario el borde ES el
+// límite del control, así que WCAG pide 3:1 (el decorativo da 1,86:1).
+const estiloCampo = { borderColor: "var(--border-strong)", background: "var(--surface-0)", color: "var(--ink-1)" };
 
   return (
     <div>
@@ -121,7 +123,7 @@ export function AuthForm({ avisoInicial = null }: { avisoInicial?: string | null
         {/* `type="submit"` explícito: sin él, cualquier prueba automática que
             busque el botón de envío no lo encuentra --- y no lo encontró. */}
         <button type="submit" disabled={loading}
-                className="mt-1 flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+                className="btn-marca mt-1 flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold transition-colors disabled:opacity-60"
                 style={{ background: "var(--accent)" }}>
           {loading ? <LoaderCircle className="animate-spin" size={17} />
                    : <>{mode === "login" ? "Entrar a mi espacio" : "Crear mi espacio"} <ArrowRight size={16} /></>}

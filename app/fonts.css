@@ -1,1 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+/* Inter es la tipografía por defecto del manual de marca: «limpia, legible y
+   consistente con el enfoque técnico». Antes se cargaba Manrope, que no está en
+   el manual.
+
+   DM Mono se conserva para los códigos de muestra (`DEMO-####`) y las cifras. El
+   manual v0.1 NO define monoespaciada — es un hueco declarado en el informe, no
+   una licencia para elegir a capricho. */
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap');

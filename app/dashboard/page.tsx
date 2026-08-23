@@ -20,6 +20,12 @@ export default async function DashboardPage() {
   // El error de esta llamada SE MIRA. Antes se descartaba, y como el panel tenía
   // un código de reserva que pintar, una base sin ni una tabla se veía
   // exactamente igual que un aprovisionamiento correcto.
+  // El nombre YA estaba en la base: el trigger lo copia de `raw_user_meta_data`
+  // (Google lo manda como `name`, el formulario como `full_name`). Lo que faltaba
+  // era que la interfaz lo pidiera --- era un fallo de presentación, no de datos.
+  const { data: perfil } = await supabase
+    .from("profiles").select("full_name").eq("id", user.id).maybeSingle();
+
   const { error: errorRpc } = await supabase.rpc("claim_demo_sample");
   const { data: sample, error: errorConsulta } = await supabase
     .from("samples").select("sample_code, received_at, status")
@@ -27,6 +33,10 @@ export default async function DashboardPage() {
 
   const fallo = errorRpc ?? errorConsulta;
   const aprovisionada = Boolean(sample?.sample_code);
+
+  // Si no hay nombre, el nombre local del correo. Nunca se inventa uno.
+  const nombre = perfil?.full_name?.trim() || user.email?.split("@")[0] || null;
+  const saludo = nombre ? nombre.split(" ")[0] : null;
 
   /**
    * Los cuatro pasos son el `enum sample_status` del esquema, en orden. Antes se
@@ -52,10 +62,13 @@ export default async function DashboardPage() {
   return (
     <Shell className="py-10 sm:py-14">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <span className="rounded-md px-2.5 py-1 font-mono text-[10px] font-medium tracking-[0.12em]"
-              style={{ background: "var(--surface-2)", color: "var(--ink-2)" }}>
-          DEMOSTRACIÓN · MUESTRA SINTÉTICA
-        </span>
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="rounded-md px-2.5 py-1 font-mono text-[10px] font-medium tracking-[0.12em]"
+                style={{ background: "var(--surface-2)", color: "var(--ink-2)" }}>
+            DEMOSTRACIÓN · MUESTRA SINTÉTICA
+          </span>
+          {saludo ? <span className="ink-2 text-sm">Hola, {saludo}</span> : null}
+        </div>
         <form action="/auth/signout" method="post">
           <button type="submit" className="ink-2 inline-flex items-center gap-1.5 text-sm font-medium hover:opacity-80">
             <LogOut size={15} /> Salir

@@ -75,7 +75,7 @@ export default function Sobre() {
           proceso, escríbenos.
         </p>
         <a href="mailto:hola@sapyria.com"
-           className="mt-6 inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold text-white"
+           className="btn-marca mt-6 inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-colors"
            style={{ background: "var(--accent)" }}>
           hola@sapyria.com
         </a>

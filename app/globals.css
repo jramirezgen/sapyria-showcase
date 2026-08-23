@@ -3,10 +3,19 @@
 /* ───────────────────────────────────────────────────────────────────────────
    Sistema de diseño de Sapyria.
 
-   Los colores de serie salen de la paleta de referencia YA VALIDADA (contraste,
-   separación para daltonismo y piso de visión normal comprobados con el script
-   de la skill `dataviz`). No se eligieron a ojo y no se cambian a ojo: si hace
-   falta otro, se vuelve a validar.
+   La paleta sale del MANUAL DE MARCA (v0.1), no del gusto de nadie: teal
+   `#257F80`, primario oscuro `#004C4C`, profundo `#002626`, resalte `#40E0D0`.
+   Antes esto era azul `#2a78d6` — fuera de manual y, además, **4,42:1 sobre
+   blanco: por debajo del 4,5 que exige WCAG AA**. El teal de marca da 4,74:1.
+   Alinear con la marca arregló también un defecto de accesibilidad.
+
+   Cada par se calculó, ninguno se eligió a ojo. Los valores están en
+   `docs/INFORME_ESTADO.md`.
+
+   Los colores de SERIE son otra cosa y NO salen del manual: una paleta
+   categórica de datos cumple otra función que el cromatismo de marca. Con un
+   solo tono no se distinguen ocho series, y repintarlas rompería la separación
+   para daltonismo ya verificada. El manual admite paletas por contexto.
 
    Cada valor se define en `:root` y se redefine bajo `prefers-color-scheme` y
    bajo `[data-theme]`, para que el modo del sistema y el interruptor del
@@ -14,7 +23,7 @@
    ─────────────────────────────────────────────────────────────────────────── */
 
 @theme {
-  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "DM Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
@@ -22,15 +31,16 @@
   color-scheme: light;
 
   --surface-0: #ffffff;
-  --surface-1: #fcfcfb;
-  --surface-2: #f4f4f1;
-  --border:    #e3e3dd;
+  --surface-1: #fbfbf6;   /* el beige del manual, aclarado: en #F5F5DC el acento cae a 4,29:1 */
+  --surface-2: #f1f3ee;   /* aquí el acento NO vale como texto (4,25:1): usar --accent-strong */
+  --border:        #c6d2cf;   /* divisores: decorativos */
+  --border-strong: #7e9995;   /* campos de formulario: 3,05:1, el borde SÍ es el límite */
 
-  --ink-1: #0b0b0b;
-  --ink-2: #52514e;
-  --ink-3: #7b7a75;
+  --ink-1: #002626;   /* 16,09:1 */
+  --ink-2: #3d5c5c;   /*  7,28:1 */
+  --ink-3: #577373;   /*  5,12:1 */
 
-  /* serie categórica, en orden fijo — nunca se cicla */
+  /* serie categórica, en orden fijo — nunca se cicla, nunca se repinta a marca */
   --series-1: #2a78d6;
   --series-2: #eb6834;
   --series-3: #1baf7a;
@@ -40,25 +50,33 @@
   --series-7: #4a3aa7;
   --series-8: #e34948;
 
-  /* estado — reservados, nunca reutilizados como «serie 9» */
-  --good:     #0ca30c;
-  --warning:  #fab219;
-  --serious:  #ec835a;
-  --critical: #d03b3b;
+  /* Estado. El manual v0.1 NO define éxito ni error: mostaza y coral son suyos
+     y sólo valen como RELLENO con texto oscuro encima (como texto sobre blanco
+     dan 1,35:1 y 2,50:1). `good` y `critical` son PROPUESTA pendiente de
+     aprobación, elegidos para pasar AA. Y nunca estado sólo por color: siempre
+     icono o etiqueta, como manda el manual. */
+  --good:     #1f7a4d;   /* PROPUESTA · 5,32:1 */
+  --warning:  #ffdb58;   /* mostaza del manual · relleno, texto #002626 → 11,89:1 */
+  --serious:  #ff7f50;   /* coral del manual  · relleno, texto #002626 →  6,44:1 */
+  --critical: #b3402e;   /* PROPUESTA · 5,69:1 */
 
-  --accent: #2a78d6;
+  --accent:        #257f80;   /* 4,74:1 sobre blanco */
+  --on-accent:     #ffffff;   /* texto SOBRE el acento · 4,74:1 */
+  --on-status:     #ffffff;   /* icono/texto SOBRE un relleno de estado · mismo giro que --on-accent */
+  --accent-strong: #004c4c;   /* 9,82:1 · hover y texto sobre superficies teñidas */
 }
 
 @media (prefers-color-scheme: dark) {
   :root:where(:not([data-theme="light"])) {
     color-scheme: dark;
-    --surface-0: #121211;
-    --surface-1: #1a1a19;
-    --surface-2: #232322;
-    --border:    #33332f;
-    --ink-1: #ffffff;
-    --ink-2: #c3c2b7;
-    --ink-3: #8f8e86;
+    --surface-0: #002626;   /* el fondo oscuro del manual */
+    --surface-1: #063434;
+    --surface-2: #0d4240;
+    --border:        #1c5450;
+    --border-strong: #4a8884;   /* 3,94:1 — campos de formulario */
+    --ink-1: #ffffff;   /* 16,09:1 */
+    --ink-2: #b6cfcf;   /*  9,82:1 */
+    --ink-3: #95b3b3;
     --series-1: #3987e5;
     --series-2: #d95926;
     --series-3: #199e70;
@@ -67,19 +85,26 @@
     --series-6: #008300;
     --series-7: #9085e9;
     --series-8: #e66767;
-    --accent: #3987e5;
+    --good:     #57c98d;   /* PROPUESTA · 7,77:1 */
+    --critical: #ff8f73;   /* PROPUESTA · 7,22:1 */
+    --accent:        #40e0d0;   /* el resalte del manual para fondo oscuro · 9,80:1 */
+    --on-accent:     #002626;   /* en oscuro el acento es CLARO: el texto encima debe ser oscuro.
+                                   Con blanco daba 1,64:1 --- ilegible. Así, 9,80:1. */
+    --on-status:     #002626;   /* igual con good/critical, que en oscuro también son claros */
+    --accent-strong: #66b2b2;   /* 6,57:1 */
   }
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --surface-0: #121211;
-  --surface-1: #1a1a19;
-  --surface-2: #232322;
-  --border:    #33332f;
-  --ink-1: #ffffff;
-  --ink-2: #c3c2b7;
-  --ink-3: #8f8e86;
+  --surface-0: #002626;   /* el fondo oscuro del manual */
+  --surface-1: #063434;
+  --surface-2: #0d4240;
+  --border:        #1c5450;
+  --border-strong: #4a8884;   /* 3,94:1 — campos de formulario */
+  --ink-1: #ffffff;   /* 16,09:1 */
+  --ink-2: #b6cfcf;   /*  9,82:1 */
+  --ink-3: #95b3b3;
   --series-1: #3987e5;
   --series-2: #d95926;
   --series-3: #199e70;
@@ -88,7 +113,13 @@
   --series-6: #008300;
   --series-7: #9085e9;
   --series-8: #e66767;
-  --accent: #3987e5;
+  --good:     #57c98d;   /* PROPUESTA · 7,77:1 */
+  --critical: #ff8f73;   /* PROPUESTA · 7,22:1 */
+  --accent:        #40e0d0;   /* el resalte del manual para fondo oscuro · 9,80:1 */
+    --on-accent:     #002626;   /* en oscuro el acento es CLARO: el texto encima debe ser oscuro.
+                                   Con blanco daba 1,64:1 --- ilegible. Así, 9,80:1. */
+    --on-status:     #002626;   /* igual con good/critical, que en oscuro también son claros */
+  --accent-strong: #66b2b2;   /* 6,57:1 */
 }
 
 @layer base {
@@ -104,6 +135,11 @@
 }
 
 @layer utilities {
+  /* Botón principal del manual: fondo #257F80, texto blanco, hover #004C4C.
+     Vive aquí para que el hover no se repita —ni se olvide— en cada archivo. */
+  .btn-marca { background: var(--accent); color: var(--on-accent); }
+  .btn-marca:hover { background: var(--accent-strong); }
+
   .shell { margin-inline: auto; width: 100%; max-width: 76rem; padding-inline: 1.5rem; }
   .surface-1 { background: var(--surface-1); }
   .surface-2 { background: var(--surface-2); }

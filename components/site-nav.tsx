@@ -46,7 +46,7 @@ export function SiteNav() {
         <div className="flex items-center gap-2">
           <Link
             href="/login"
-            className="hidden rounded-lg px-4 py-2 text-sm font-semibold text-white sm:inline-flex"
+            className="btn-marca hidden rounded-lg px-4 py-2 text-sm font-semibold transition-colors sm:inline-flex"
             style={{ background: "var(--accent)" }}
           >
             Entrar
@@ -81,7 +81,7 @@ export function SiteNav() {
             <Link
               href="/login"
               onClick={() => setAbierto(false)}
-              className="mt-2 rounded-lg px-4 py-3 text-center text-sm font-semibold text-white"
+              className="btn-marca mt-2 rounded-lg px-4 py-3 text-center text-sm font-semibold transition-colors"
               style={{ background: "var(--accent)" }}
             >
               Entrar

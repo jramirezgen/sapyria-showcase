@@ -53,8 +53,8 @@ export default async function Evidencia() {
               <li key={c.criterio}
                   className="flex items-center gap-3 rounded-lg border px-4 py-3 text-sm"
                   style={{ borderColor: "var(--border)", background: "var(--surface-0)" }}>
-                <span aria-hidden className="grid size-5 shrink-0 place-items-center rounded-full text-white"
-                      style={{ background: c.cumple ? "var(--good)" : "var(--critical)" }}>
+                <span aria-hidden className="grid size-5 shrink-0 place-items-center rounded-full"
+                      style={{ background: c.cumple ? "var(--good)" : "var(--critical)", color: "var(--on-status)" }}>
                   {c.cumple ? <Check size={12} /> : <X size={12} />}
                 </span>
                 <span className="flex-1">{c.criterio}</span>

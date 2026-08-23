@@ -105,7 +105,7 @@ export default async function Home() {
               return (
                 <Card key={titulo as string} className="flex gap-4">
                   <span aria-hidden className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-lg"
-                        style={{ background: "var(--surface-2)", color: "var(--accent)" }}>
+                        style={{ background: "var(--surface-2)", color: "var(--accent-strong)" }}>
                     <I size={18} />
                   </span>
                   <div>

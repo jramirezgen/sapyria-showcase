@@ -103,7 +103,7 @@ export function PrimaryLink({ href, children }: { href: string; children: ReactN
   return (
     <Link
       href={href}
-      className="inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+      className="btn-marca inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-colors"
       style={{ background: "var(--accent)" }}
     >
       {children}
