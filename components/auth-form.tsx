@@ -7,6 +7,24 @@ import { urlDeRetorno } from "@/lib/site";
 import { mensajeHumano } from "@/lib/auth-messages";
 
 /**
+ * ⛔ El acceso con Google está OCULTO a propósito.
+ *
+ * La pantalla de consentimiento de Google dice, literalmente, **«Sign in to
+ * continue to Claude»**. No sale de este código —no hay ni una mención en el
+ * repositorio ni en nada desplegado— sino del cliente OAuth configurado en
+ * Supabase, que pertenece a un proyecto de Google Cloud llamado «Claude».
+ *
+ * Que el acceso de una empresa de genética diga «continuar en Claude» destruye
+ * la confianza antes de la primera pantalla, así que el botón no se enseña.
+ *
+ * **Para volver a encenderlo:** renombrar la aplicación en
+ * Google Cloud → Pantalla de consentimiento OAuth → Nombre de la aplicación,
+ * comprobar que la pantalla dice «Sapyria», y poner esto en `true`. El resto ya
+ * está listo, incluido el selector de cuenta.
+ */
+const GOOGLE_DISPONIBLE = false;
+
+/**
  * El formulario de acceso.
  *
  * Se reescribió el 2026-08-22: usaba clases del CSS artesanal que se retiró al
@@ -55,7 +73,13 @@ export function AuthForm({ avisoInicial = null }: { avisoInicial?: string | null
     setMessage(null);
     const { error } = await createSupabaseBrowserClient().auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: urlDeRetorno() },
+      options: {
+        redirectTo: urlDeRetorno(),
+        // Sin esto, Google reutiliza en silencio la única sesión abierta y no
+        // muestra el selector: salías, pulsabas «crear cuenta» y entrabas otra
+        // vez con la misma. `select_account` obliga a preguntar siempre.
+        queryParams: { prompt: "select_account" },
+      },
     });
     if (error) { setLoading(false); setMessage(mensajeHumano(error.message)); }
   }
@@ -87,6 +111,8 @@ const estiloCampo = { borderColor: "var(--border-strong)", background: "var(--su
         ))}
       </div>
 
+      {GOOGLE_DISPONIBLE ? (
+      <>
       <button
         type="button" onClick={signInGoogle} disabled={loading}
         className="mt-4 flex w-full items-center justify-center gap-2.5 rounded-lg border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-[var(--surface-2)] disabled:opacity-60"
@@ -109,6 +135,8 @@ const estiloCampo = { borderColor: "var(--border-strong)", background: "var(--su
         <span className="ink-3 text-xs">o</span>
         <i className="h-px flex-1" style={{ background: "var(--border)" }} />
       </div>
+      </>
+      ) : <div className="mt-2" />}
 
       <form onSubmit={submit} className="grid gap-3">
         {mode === "register" ? (

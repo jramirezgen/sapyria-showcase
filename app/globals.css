@@ -30,11 +30,16 @@
 :root {
   color-scheme: light;
 
+  /* Superficies NEUTRAS, no beige. El manual asigna `#FFFFFF` a «fondo principal
+     y espacio negativo» y reserva el beige `#F5F5DC` para «**piezas impresas**,
+     casos de estudio y fondos cálidos de baja densidad»: es papel, no interfaz.
+     Lo que había (`#f1f3ee` = R241 G243 B238) tiraba a verde y se notaba. */
   --surface-0: #ffffff;
-  --surface-1: #fbfbf6;   /* el beige del manual, aclarado: en #F5F5DC el acento cae a 4,29:1 */
-  --surface-2: #f1f3ee;   /* aquí el acento NO vale como texto (4,25:1): usar --accent-strong */
-  --border:        #c6d2cf;   /* divisores: decorativos */
-  --border-strong: #7e9995;   /* campos de formulario: 3,05:1, el borde SÍ es el límite */
+  --surface-1: #fafafa;   /* neutro · el acento encima da 4,55:1 */
+  --surface-2: #f0f1f1;   /* aquí el acento NO vale como texto (4,19:1): usar --accent-strong */
+  --border:        #dfdfdf;   /* gris NEUTRO, la familia del #D3D3D3 que el manual asigna
+                                 a «bordes, divisores y fondos secundarios» */
+  --border-strong: #8c8c8c;   /* campos de formulario: 3,05:1, ahí el borde SÍ es el límite */
 
   --ink-1: #002626;   /* 16,09:1 */
   --ink-2: #3d5c5c;   /*  7,28:1 */

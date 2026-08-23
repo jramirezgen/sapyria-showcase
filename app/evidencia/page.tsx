@@ -181,6 +181,74 @@ export default async function Evidencia() {
           </Card>
         </div>
       </Section>
+
+      {/* ── Lo que se preguntó y no se pudo ────────────────────────────────
+          Publicar esto es la parte que casi nadie hace, y es exactamente lo que
+          distingue un tamizaje honesto de uno que promete. Las cifras salen del
+          estudio pre-registrado de agosto de 2026 sobre 16 761 muestras de 57
+          tejidos: docs/00_GOBIERNO/65_RESULTADO_EJES_ROBUSTOS.md. */}
+      <Section>
+        <Eyebrow>Preguntas cerradas con una cifra</Eyebrow>
+        <H2>Lo que nos preguntamos<br />y no se puede leer.</H2>
+        <p className="ink-2 mt-5 max-w-2xl text-base leading-relaxed pretty">
+          Si esto describe tu estado molecular, ¿puede decir tu sexo, tu edad, tus
+          alergias? Se respondió midiéndolo sobre <strong>16 761 muestras de 57
+          tejidos</strong>, con el protocolo escrito antes de mirar ningún resultado.
+          Ninguna de estas preguntas superó el listón, y por eso ninguna aparece en
+          un informe.
+        </p>
+
+        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+          <Card>
+            <h3 className="text-base font-bold">Sexo — real, y demasiado débil</h3>
+            <p className="ink-2 mt-2 text-sm leading-relaxed pretty">
+              La señal existe y <strong>se repite en 44 tejidos distintos</strong>, así
+              que es biología y no un artefacto. Pero acierta 0,66 de 1: poco más que
+              lanzar una moneda cargada. El motivo es de fondo —
+              <strong>el cromosoma Y no contiene ni un solo miRNA</strong>—, así que no
+              hay método que lo levante.
+            </p>
+          </Card>
+          <Card>
+            <h3 className="text-base font-bold">Edad — era el laboratorio</h3>
+            <p className="ink-2 mt-2 text-sm leading-relaxed pretty">
+              La correlación cruda parecía buena (0,34). Al descontar cuánto tardó cada
+              muestra en procesarse, <strong>bajó a 0,13</strong>. Lo que parecía edad
+              era, en buena parte, el tiempo que la muestra pasó esperando.
+            </p>
+          </Card>
+          <Card>
+            <h3 className="text-base font-bold">Origen del tejido — la trampa</h3>
+            <p className="ink-2 mt-2 text-sm leading-relaxed pretty">
+              Nuestra referencia acierta el tejido de una muestra pura el{" "}
+              <strong>95,5 %</strong> de las veces. Invita a venderlo. Pero al mezclar
+              una fracción conocida en sangre, <strong>por debajo del 20 % es
+              completamente ciega</strong>. Saber clasificar un tejido no es saber
+              detectarlo dentro de la sangre.
+            </p>
+          </Card>
+          <Card>
+            <h3 className="text-base font-bold">Alergias — el panel no es de alergias</h3>
+            <p className="ink-2 mt-2 text-sm leading-relaxed pretty">
+              Los miRNA que la literatura asocia a enfermedad alérgica están asociados,
+              cada uno, a una mediana de <strong>58 enfermedades distintas</strong>;
+              uno al azar, a 3,5. No son marcadores de alergia: son los más estudiados,
+              y aparecen en todo.
+            </p>
+          </Card>
+        </div>
+
+        <div className="mt-6">
+          <Nota tono="aviso">
+            <strong>Y dos que ni se intentaron.</strong> La ancestría exige variantes
+            heredadas del ADN, y esto mide <em>expresión</em> — que cambia con la hora
+            del día y con la última comida. La personalidad y los gustos no tienen
+            base biológica establecida en lo que circula por la sangre. Decir lo
+            contrario sería vender humo, y preferimos decirlo aquí.
+          </Nota>
+        </div>
+      </Section>
+
     </>
   );
 }

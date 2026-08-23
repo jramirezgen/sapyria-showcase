@@ -10,6 +10,9 @@ import { isSupabaseConfigured } from "@/lib/supabase";
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 
 export const dynamic = "force-dynamic";
+// El panel muestra datos de una persona: no puede quedarse en el caché del
+// navegador para que el botón «atrás» lo enseñe después de salir.
+export const fetchCache = "force-no-store";
 
 /**
  * El espacio personal.
