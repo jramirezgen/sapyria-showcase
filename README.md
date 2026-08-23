@@ -56,14 +56,12 @@ limitaciones como capas distintas.
 
 ## Configuración de Supabase
 
-1. En el SQL Editor del proyecto `Sapyria_platform`, ejecute **en orden**
-   [`supabase/001_product_demo.sql`](supabase/001_product_demo.sql) y después
-   [`supabase/002_demo_sample_code.sql`](supabase/002_demo_sample_code.sql).
-   La segunda es obligatoria: `001` exige códigos con el formato `SPY-####-####`,
-   que es el de los casos clínicos **reales**, y `002` los pasa a `DEMO-####`
-   para que una muestra sintética no se pueda confundir con una real.
-2. En Authentication, habilite Google y Email. Para Google, agregue estas URLs
-   de redirección:
+1. En el SQL Editor del proyecto `Sapyria_platform`, ejecute
+   [`supabase/003_esquema_demo.sql`](supabase/003_esquema_demo.sql). **Es la
+   única que hay que aplicar**: `001` y `002` quedan como históricas porque la
+   cadena no se podía correr —`002` cambiaba el tipo de retorno de una función
+   que `001` ya había creado, y PostgreSQL lo rechaza— y porque `001` sembraba
+   puntajes inventados. Detalle en [`docs/AUTENTICACION.md`](docs/AUTENTICACION.md).
 
    ```text
    https://sapyria.com/auth/callback

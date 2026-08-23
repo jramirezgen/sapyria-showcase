@@ -1,3 +1,18 @@
+-- ⛔ HISTÓRICA — NO APLICAR. Sustituida por `003_esquema_demo.sql`.
+--
+-- Se conserva porque documenta lo que se intentó, no porque sirva. Dos motivos
+-- por los que esta cadena NO se podía aplicar:
+--
+--   · `001` declara `claim_demo_sample() returns uuid` y `002` hace
+--     `create or replace … returns void`. PostgreSQL lo rechaza con
+--     `42P13: cannot change return type of existing function`, así que `002`
+--     fallaba siempre si `001` había corrido antes.
+--   · `001` sembraba en `demo_results` los puntajes 0.81 / 0.74 / 0.62 y el
+--     módulo «Homeostasis neuronal», que no existe — los mismos datos
+--     fabricados que se habían quitado de la web. `002` no los tocaba.
+--
+-- Descubierto el 2026-08-23 auditando por qué el panel mostraba `DEMO-0000`.
+
 -- Los códigos de demostración dejan de parecerse a un caso clínico.
 --
 -- El esquema exigía `SPY-####-####`, que es EXACTAMENTE el formato de los casos

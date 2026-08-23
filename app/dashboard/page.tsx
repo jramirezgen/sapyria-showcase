@@ -16,10 +16,17 @@ export default async function DashboardPage() {
 
   // Idempotente y forzado por `auth.uid()` en el servidor: crea únicamente una
   // muestra sintética aislada para esta cuenta.
-  await supabase.rpc("claim_demo_sample");
-  const { data: sample } = await supabase
+  //
+  // El error de esta llamada SE MIRA. Antes se descartaba, y como el panel tenía
+  // un código de reserva que pintar, una base sin ni una tabla se veía
+  // exactamente igual que un aprovisionamiento correcto.
+  const { error: errorRpc } = await supabase.rpc("claim_demo_sample");
+  const { data: sample, error: errorConsulta } = await supabase
     .from("samples").select("sample_code, received_at, status")
     .eq("user_id", user.id).eq("is_demo", true).limit(1).maybeSingle();
+
+  const fallo = errorRpc ?? errorConsulta;
+  const aprovisionada = Boolean(sample?.sample_code);
 
   /**
    * Los cuatro pasos son el `enum sample_status` del esquema, en orden. Antes se
@@ -33,14 +40,14 @@ export default async function DashboardPage() {
     { clave: "analysis", texto: "Análisis" },
     { clave: "ready", texto: "Listo" },
   ] as const;
-  const estado = sample?.status ?? "ready";
-  const alcanzado = Math.max(0, PASOS.findIndex((p) => p.clave === estado));
+  const estado = sample?.status ?? null;
+  const alcanzado = estado ? PASOS.findIndex((p) => p.clave === estado) : -1;
 
-  const codigo = sample?.sample_code ?? demoResult.sampleCode;
+  const codigo = sample?.sample_code ?? null;
   const recibida = sample?.received_at
     ? new Intl.DateTimeFormat("es-PE", { day: "numeric", month: "short", year: "numeric" })
         .format(new Date(sample.received_at))
-    : demoResult.receivedAt;
+    : null;
 
   return (
     <Shell className="py-10 sm:py-14">
@@ -59,18 +66,46 @@ export default async function DashboardPage() {
       <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <Eyebrow>Mi muestra</Eyebrow>
-          <h1 className="font-mono text-3xl font-extrabold tracking-[-0.02em] sm:text-4xl">{codigo}</h1>
-          <p className="ink-2 mt-1 text-sm">Recibida el {recibida} · entorno de demostración</p>
+          {codigo ? (
+            <>
+              <h1 className="font-mono text-3xl font-extrabold tracking-[-0.02em] sm:text-4xl">{codigo}</h1>
+              <p className="ink-2 mt-1 text-sm">Recibida el {recibida} · entorno de demostración</p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-3xl font-extrabold tracking-[-0.02em] sm:text-4xl">Aún sin asignar</h1>
+              <p className="ink-2 mt-1 text-sm">Tu cuenta está activa; falta el aprovisionamiento.</p>
+            </>
+          )}
         </div>
-        <span className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold"
-              style={{ background: "color-mix(in oklab, var(--good) 14%, transparent)", color: "var(--good)" }}>
-          <Check size={15} /> {sample?.status === "ready" ? "Análisis completado" : demoResult.status}
-        </span>
+        {estado === "ready" ? (
+          <span className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold"
+                style={{ background: "color-mix(in oklab, var(--good) 14%, transparent)", color: "var(--good)" }}>
+            <Check size={15} /> Análisis completado
+          </span>
+        ) : null}
       </div>
+
+      {aprovisionada ? null : (
+        <div className="mt-6">
+          <Nota tono="aviso">
+            <strong>Tu espacio todavía no tiene muestra asignada.</strong>
+            <p className="mt-1.5">
+              La sesión es válida y la cuenta existe: lo que falta es el aprovisionamiento
+              en la base de datos. Lo de abajo es contenido de demostración fijo —no
+              procede de ninguna muestra tuya— y lo dejamos visible para que veas la
+              forma del informe.
+            </p>
+            {fallo ? (
+              <p className="ink-3 mt-2 font-mono text-xs">Detalle técnico: {fallo.message}</p>
+            ) : null}
+          </Nota>
+        </div>
+      )}
 
       <ol className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-4">
         {PASOS.map((paso, i) => {
-          const hecho = i <= alcanzado;
+          const hecho = alcanzado >= 0 && i <= alcanzado;
           return (
             <li key={paso.clave} aria-current={i === alcanzado ? "step" : undefined}
                 className="rounded-lg border px-3 py-2.5 text-sm"

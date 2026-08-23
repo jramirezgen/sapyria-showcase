@@ -81,3 +81,99 @@ curl -s -o /dev/null -w '%{http_code}\n' -X POST \
   -H "apikey: $NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY" -H 'Content-Type: application/json' -d '{}'
 # 404 = la migración no está aplicada · 401 = está aplicada y RLS la protege
 ```
+
+---
+
+# Auditoría del registro — 2026-08-23
+
+Motivo: el panel cargaba y mostraba `DEMO-0000`, y no estaba claro si detrás
+había un usuario, un perfil y una muestra, o nada.
+
+**Había nada.** `DEMO-0000` no lo genera la base: era el **valor de reserva** de
+`lib/demo.ts`, que se pintaba cuando la consulta no devolvía nada. Un panel
+completo, con su código de muestra y sus cuatro pasos en verde, sobre una base
+de datos **sin una sola tabla**. Indistinguible de un éxito.
+
+## Qué ocurría
+
+| Comprobación | Resultado |
+| --- | --- |
+| `profiles`, `samples`, `demo_results`, `claim_demo_sample` | **404 las cuatro** — no existían |
+| usuarios en `auth.users` | **1**, `provider: google`, `confirmation_sent_at: null` |
+| usuarios con proveedor `email` | **0** — esa ruta no se había completado nunca |
+| `mailer_autoconfirm` | `false` |
+
+La cuenta que llegaba al panel se creó con **«Continuar con Google»**, que se
+salta la confirmación porque Google ya validó la dirección. Por eso parecía que
+el registro funcionaba: funcionaba *el de Google*.
+
+## Qué debe ocurrir
+
+```
+/login → signUp(email,password) → GoTrue crea el usuario SIN sesión
+       → correo de confirmación → /auth/callback canjea el código PKCE
+       → trigger on_auth_user_created crea el perfil
+       → claim_demo_sample() asigna una muestra DEMO-#### (nunca 0000)
+       → /dashboard la muestra, o dice que no la hay
+```
+
+## Comprobado empíricamente contra producción
+
+Registro real con una dirección de prueba, borrada al terminar:
+
+| | |
+| --- | --- |
+| `signUp` | HTTP 200, **sin sesión** — correcto, exige confirmar |
+| usuario | creado, `provider: email`, `full_name` del formulario guardado |
+| `confirmation_sent_at` | **puesto** → GoTrue sí intentó enviar; el SMTP respondió |
+| `email_confirmed_at` | vacío — correcto, aún sin confirmar |
+| limpieza | usuario borrado, vuelta a 1 en `auth.users` |
+
+> ⚠️ **Lo único que sigue sin verificar es que el correo LLEGUE.** El SMTP por
+> defecto de Supabase está limitado a direcciones del equipo y a unos pocos
+> envíos por hora. Para clientes reales hace falta SMTP propio; si no, el correo
+> se acepta y se descarta sin que nadie se entere.
+
+## Por qué la cadena `001 → 002` no podía aplicarse
+
+1. `001` declara `claim_demo_sample() returns uuid`; `002` hace
+   `create or replace … returns void`. PostgreSQL lo rechaza con
+   **`42P13: cannot change return type of existing function`**. `002` fallaba
+   siempre si `001` había corrido.
+2. `001` sembraba en `demo_results` los puntajes `0.81 / 0.74 / 0.62` y el módulo
+   **«Homeostasis neuronal»**, que no existe — los datos fabricados que ya se
+   habían quitado de la web. `002` no los tocaba.
+
+Ambas quedan marcadas como históricas. La buena es **`003_esquema_demo.sql`**:
+consolidada, idempotente, sin `demo_results`, con el `check` `DEMO-####` desde el
+principio, y con **relleno de perfiles** para las cuentas anteriores al trigger
+—sin él, el usuario de Google queda huérfano y `claim_demo_sample()` le falla por
+clave foránea—.
+
+## ⛔ Bloqueo: no se pudo aplicar
+
+La contraseña de base de datos del fichero de credenciales **no autentica**:
+
+```
+FATAL: password authentication failed for user "postgres"
+```
+
+Comprobado que el resto es correcto: el proyecto vive en **us-east-2** (lo dicen
+dos vías independientes — el bloque IPv6 `2600:1f16::/34` en los rangos
+publicados de AWS, y que `aws-0-us-east-2` es el único *pooler* que responde
+«password authentication failed» en vez de «tenant not found»). La conexión
+directa `db.<ref>.supabase.co` es **sólo IPv6** y desde WSL no hay ruta; el
+*pooler* sí da IPv4, pero la contraseña es la que falla.
+
+**La vía más rápida es pegar `003_esquema_demo.sql` en el SQL Editor de
+Supabase**: son treinta segundos y no obliga a compartir ninguna credencial.
+
+Para comprobar después, sin abrir la consola — **404 = sin aplicar · 401 =
+aplicada y protegida por RLS**:
+
+```bash
+curl -s -o /dev/null -w '%{http_code}\n' -X POST \
+  "$NEXT_PUBLIC_SUPABASE_URL/rest/v1/rpc/claim_demo_sample" \
+  -H "apikey: $NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY" \
+  -H 'Content-Type: application/json' -d '{}'
+```

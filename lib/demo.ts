@@ -11,10 +11,23 @@
  * `0.62`, cuando está medido que **un conjunto encendido no identifica su
  * proceso**. Aquí van con su nivel de evidencia real.
  */
+/**
+ * ⚠️ Aquí NO hay código de muestra, ni estado, ni fecha —y es deliberado—.
+ *
+ * Los había: `sampleCode: "DEMO-0000"`, `status: "Análisis completado"`,
+ * `receivedAt: "—"`. Servían de reserva cuando la consulta a la base no devolvía
+ * nada, así que el panel pintaba una muestra **inventada con aire de real** y
+ * quedaba **indistinguible de un éxito**. La base estaba vacía —ni una tabla—, el
+ * panel se veía perfecto, y el dueño del producto creyó durante días que el
+ * aprovisionamiento funcionaba.
+ *
+ * La identidad de la muestra sale de la base o NO SE PINTA. No basta con dejar
+ * de usar el valor de reserva: mientras exista, algo volverá a pintarlo.
+ *
+ * Lo que sí vive aquí es el contenido demostrativo —fenotipo, conjuntos,
+ * evidencia, límites—, que va rotulado como sintético y no afirma de más.
+ */
 export const demoResult = {
-  sampleCode: "DEMO-0000",
-  status: "Análisis completado",
-  receivedAt: "—",
   /** Las seis dimensiones, con el nivel que el sistema realmente sostiene. */
   fenotipo: [
     { dimension: "Composición celular", nivel: "alta",
