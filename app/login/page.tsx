@@ -7,7 +7,23 @@ export const metadata: Metadata = {
   description: "Espacio privado de demostración de Sapyria.",
 };
 
-export default function LoginPage() {
+/**
+ * `auth_error` lo pone `/auth/callback` cuando el canje falla: un enlace caducado,
+ * un `redirect_to` fuera de la lista blanca, una configuración a medias. Antes esos
+ * tres casos terminaban en un `/login` en blanco, indistinguibles entre sí.
+ */
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ auth_error?: string; sesion?: string }>;
+}) {
+  const params = await searchParams;
+  const aviso = params.auth_error
+    ? params.auth_error
+    : params.sesion === "cerrada"
+      ? "Cerraste sesión. Tu espacio te espera cuando vuelvas."
+      : null;
+
   return (
     <Shell className="py-14 sm:py-20">
       <div className="grid gap-12 lg:grid-cols-[1.05fr_1fr] lg:items-start">
@@ -42,7 +58,7 @@ export default function LoginPage() {
           </div>
         </div>
         <Card className="lg:sticky lg:top-24">
-          <AuthForm />
+          <AuthForm avisoInicial={aviso} />
         </Card>
       </div>
     </Shell>

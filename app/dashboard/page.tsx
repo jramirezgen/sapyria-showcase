@@ -21,6 +21,21 @@ export default async function DashboardPage() {
     .from("samples").select("sample_code, received_at, status")
     .eq("user_id", user.id).eq("is_demo", true).limit(1).maybeSingle();
 
+  /**
+   * Los cuatro pasos son el `enum sample_status` del esquema, en orden. Antes se
+   * pintaban los cuatro en verde SIEMPRE, sin mirar el estado: una muestra recién
+   * recibida se anunciaba como analizada. Un indicador que no puede decir «todavía
+   * no» no es un indicador.
+   */
+  const PASOS = [
+    { clave: "received", texto: "Recibida" },
+    { clave: "processing", texto: "Procesamiento" },
+    { clave: "analysis", texto: "Análisis" },
+    { clave: "ready", texto: "Listo" },
+  ] as const;
+  const estado = sample?.status ?? "ready";
+  const alcanzado = Math.max(0, PASOS.findIndex((p) => p.clave === estado));
+
   const codigo = sample?.sample_code ?? demoResult.sampleCode;
   const recibida = sample?.received_at
     ? new Intl.DateTimeFormat("es-PE", { day: "numeric", month: "short", year: "numeric" })
@@ -34,9 +49,11 @@ export default async function DashboardPage() {
               style={{ background: "var(--surface-2)", color: "var(--ink-2)" }}>
           DEMOSTRACIÓN · MUESTRA SINTÉTICA
         </span>
-        <Link href="/login" className="ink-2 inline-flex items-center gap-1.5 text-sm font-medium">
-          <LogOut size={15} /> Salir
-        </Link>
+        <form action="/auth/signout" method="post">
+          <button type="submit" className="ink-2 inline-flex items-center gap-1.5 text-sm font-medium hover:opacity-80">
+            <LogOut size={15} /> Salir
+          </button>
+        </form>
       </div>
 
       <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
@@ -52,15 +69,21 @@ export default async function DashboardPage() {
       </div>
 
       <ol className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-4">
-        {["Recibido", "Procesamiento", "Análisis", "Listo"].map((paso) => (
-          <li key={paso} className="rounded-lg border px-3 py-2.5 text-sm"
-              style={{ borderColor: "var(--border)" }}>
-            <span className="flex items-center gap-2">
-              <i aria-hidden className="size-2 rounded-full" style={{ background: "var(--good)" }} />
-              {paso}
-            </span>
-          </li>
-        ))}
+        {PASOS.map((paso, i) => {
+          const hecho = i <= alcanzado;
+          return (
+            <li key={paso.clave} aria-current={i === alcanzado ? "step" : undefined}
+                className="rounded-lg border px-3 py-2.5 text-sm"
+                style={{ borderColor: "var(--border)", background: hecho ? "var(--surface-1)" : "transparent" }}>
+              <span className="flex items-center gap-2" style={hecho ? undefined : { color: "var(--ink-3)" }}>
+                <i aria-hidden className="size-2 rounded-full"
+                   style={{ background: hecho ? "var(--good)" : "var(--ink-3)", opacity: hecho ? 1 : 0.45 }} />
+                {paso.texto}
+                <span className="sr-only">{hecho ? " (completado)" : " (pendiente)"}</span>
+              </span>
+            </li>
+          );
+        })}
       </ol>
 
       <section className="mt-10">
@@ -78,6 +101,49 @@ export default async function DashboardPage() {
             ))}
           </div>
         </Card>
+      </section>
+
+      <section className="mt-8 grid gap-6 lg:grid-cols-2">
+        <div>
+          <Eyebrow>Conjuntos moleculares</Eyebrow>
+          <Card className="mt-3">
+            <div className="grid gap-3">
+              {demoResult.modulos.map((m) => (
+                <div key={m.nombre}
+                     className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b pb-3 last:border-0 last:pb-0"
+                     style={{ borderColor: "var(--border)" }}>
+                  <strong className="flex-1 text-sm">{m.nombre}</strong>
+                  <span className="ink-2 text-sm">{m.coordinacion}</span>
+                  <EvidenceBadge nivel={m.nivel} />
+                </div>
+              ))}
+            </div>
+            <p className="ink-3 mt-4 text-xs leading-relaxed pretty">
+              Sin puntaje a propósito. El solape entre estos conjuntos es del 55–60 %,
+              así que se encienden juntos: que uno se mueva no dice cuál es la causa.
+            </p>
+          </Card>
+        </div>
+
+        <div>
+          <Eyebrow>Cómo se clasifica la evidencia</Eyebrow>
+          <Card className="mt-3">
+            <div className="grid gap-3">
+              {demoResult.evidencia.map((e) => (
+                <div key={e.nivel} className="border-b pb-3 last:border-0 last:pb-0"
+                     style={{ borderColor: "var(--border)" }}>
+                  <span className="font-mono text-[11px] font-semibold tracking-[0.1em]">{e.nivel}</span>
+                  <p className="ink-2 mt-1 text-sm leading-snug pretty">{e.criterio}</p>
+                  <p className="ink-3 mt-0.5 text-xs">{e.nota}</p>
+                </div>
+              ))}
+            </div>
+            <Link href="/evidencia" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold"
+                  style={{ color: "var(--accent)" }}>
+              Ver la validación completa <ArrowRight size={15} />
+            </Link>
+          </Card>
+        </div>
       </section>
 
       <section className="mt-8 grid gap-4">

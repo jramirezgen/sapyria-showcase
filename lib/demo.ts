@@ -30,6 +30,25 @@ export const demoResult = {
     { dimension: "Incertidumbre", nivel: "media",
       detalle: "Qué no se pudo evaluar, y por qué." },
   ],
+  /**
+   * Conjuntos moleculares. **Sin puntaje, a propósito.**
+   *
+   * Está medido que un conjunto encendido no identifica su proceso: el solape
+   * entre inflamación, estrés y reparación es del 55–60 %, así que los tres se
+   * encienden juntos y ninguno señala a nadie. Lo que se puede afirmar es que
+   * varios miRNA del conjunto se movieron a la vez; a qué se debe, no.
+   */
+  modulos: [
+    { nombre: "Respuesta inflamatoria", coordinacion: "Movimiento coordinado", nivel: "sin-atribucion" },
+    { nombre: "Respuesta a estrés celular", coordinacion: "Movimiento coordinado", nivel: "sin-atribucion" },
+    { nombre: "Reparación tisular", coordinacion: "Sin movimiento coordinado", nivel: "no-evaluable" },
+  ],
+  /** Los tres niveles del sistema, y cuántas lecturas caen en cada uno. */
+  evidencia: [
+    { nivel: "REPORTABLE", criterio: "Reproducible entre personas (ICC ≥ 0,50)", nota: "Se puede comunicar." },
+    { nivel: "EXPLORATORIO", criterio: "Se mueve, pero no se sostiene entre protocolos", nota: "No se promueve." },
+    { nivel: "NO ESTIMABLE", criterio: "Menos de cuatro cohortes independientes", nota: "No decide nada." },
+  ],
   limitaciones: [
     "Muestra sintética de demostración: no procede de ninguna persona.",
     "Sapyria no emite diagnósticos ni valida condiciones clínicas.",

@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { ArrowRight, LoaderCircle } from "lucide-react";
 import { createSupabaseBrowserClient, isSupabaseConfigured } from "@/lib/supabase";
+import { urlDeRetorno } from "@/lib/site";
 
 /**
  * El formulario de acceso.
@@ -12,9 +13,9 @@ import { createSupabaseBrowserClient, isSupabaseConfigured } from "@/lib/supabas
  * invisibles y botones pegados. Es la página donde alguien decide si confía, y
  * estaba rota.
  */
-export function AuthForm() {
+export function AuthForm({ avisoInicial = null }: { avisoInicial?: string | null }) {
   const [mode, setMode] = useState<"login" | "register">("login");
-  const [message, setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(avisoInicial);
   const [loading, setLoading] = useState(false);
 
   const noConfigurado = "La conexión segura de demostración aún está terminando de configurarse.";
@@ -33,12 +34,18 @@ export function AuthForm() {
       ? await supabase.auth.signInWithPassword({ email, password })
       : await supabase.auth.signUp({
           email, password,
-          options: { data: { full_name: fullName }, emailRedirectTo: `${window.location.origin}/auth/callback` },
+          options: { data: { full_name: fullName }, emailRedirectTo: urlDeRetorno() },
         });
     setLoading(false);
     if (result.error) return setMessage(result.error.message);
-    if (mode === "login") window.location.assign("/dashboard");
-    else setMessage("Revisa tu correo para confirmar tu cuenta y activar tu espacio Sapyria.");
+    if (mode === "login") return window.location.assign("/dashboard");
+    // Con un correo ya registrado, Supabase devuelve un usuario SIN identidades
+    // en vez de un error --- para no delatar quién tiene cuenta. Sin distinguirlo,
+    // el mensaje mandaba a revisar un correo que nunca iba a llegar.
+    const yaExistia = result.data.user !== null && (result.data.user.identities?.length ?? 0) === 0;
+    setMessage(yaExistia
+      ? "Ese correo ya tiene un espacio. Entra con tu contraseña desde la pestaña «Ingresar»."
+      : "Te enviamos un correo de confirmación. Ábrelo desde este mismo dispositivo para activar tu espacio.");
   }
 
   async function signInGoogle() {
@@ -47,7 +54,7 @@ export function AuthForm() {
     setMessage(null);
     const { error } = await createSupabaseBrowserClient().auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
+      options: { redirectTo: urlDeRetorno() },
     });
     if (error) { setLoading(false); setMessage(error.message); }
   }
