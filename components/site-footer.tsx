@@ -26,6 +26,7 @@ export function SiteFooter() {
             <li><Link href="/evidencia">Evidencia y límites</Link></li>
             <li><Link href="/sobre">Sobre Sapyria</Link></li>
             <li><Link href="/privacidad">Privacidad</Link></li>
+            <li><Link href="/terminos">Términos del servicio</Link></li>
             <li><a href="mailto:hola@sapyria.com">hola@sapyria.com</a></li>
           </ul>
         </div>

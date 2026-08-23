@@ -17,9 +17,10 @@
    solo tono no se distinguen ocho series, y repintarlas rompería la separación
    para daltonismo ya verificada. El manual admite paletas por contexto.
 
-   Cada valor se define en `:root` y se redefine bajo `prefers-color-scheme` y
-   bajo `[data-theme]`, para que el modo del sistema y el interruptor del
-   visitante ganen los dos.
+   El fondo por defecto es BLANCO, que es lo que el manual llama «fondo principal
+   y espacio negativo». La paleta oscura existe y está validada, pero sólo se
+   aplica con una elección explícita (`[data-theme="dark"]`) --- ver la nota más
+   abajo.
    ─────────────────────────────────────────────────────────────────────────── */
 
 @theme {
@@ -79,36 +80,18 @@
   --accent-strong: #004c4c;   /* 9,82:1 · hover y texto sobre superficies teñidas */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme="light"])) {
-    color-scheme: dark;
-    --surface-0: #002626;   /* el fondo oscuro del manual */
-    --surface-1: #063434;
-    --surface-2: #0d4240;
-    --border:        #1c5450;
-    --border-strong: #4a8884;   /* 3,94:1 — campos de formulario */
-    --ink-1: #ffffff;   /* 16,09:1 */
-    --ink-2: #b6cfcf;   /*  9,82:1 */
-    --ink-3: #95b3b3;
-    --series-1: #3987e5;
-    --series-2: #d95926;
-    --series-3: #199e70;
-    --series-4: #c98500;
-    --series-5: #d55181;
-    --series-6: #008300;
-    --series-7: #9085e9;
-    --series-8: #e66767;
-    --good:     #57c98d;   /* PROPUESTA · 7,77:1 */
-    --critical: #ff8f73;   /* PROPUESTA · 7,22:1 */
-    --warning-marca: #ffdb58;   /* en oscuro la mostaza del manual ya da 10,03:1 */
-    --serious-marca: #ff9b78;   /* 6,59:1 */
-    --accent:        #40e0d0;   /* el resalte del manual para fondo oscuro · 9,80:1 */
-    --on-accent:     #002626;   /* en oscuro el acento es CLARO: el texto encima debe ser oscuro.
-                                   Con blanco daba 1,64:1 --- ilegible. Así, 9,80:1. */
-    --on-status:     #002626;   /* igual con good/critical, que en oscuro también son claros */
-    --accent-strong: #66b2b2;   /* 6,57:1 */
-  }
-}
+/* ⚠️ El modo oscuro AUTOMÁTICO está desactivado a propósito.
+   
+   El manual asigna `#FFFFFF` a «fondo principal y espacio negativo»; el fondo
+   oscuro `#002626` es una variante para piezas institucionales, no el modo por
+   defecto de la web. Y como aquí **no hay interruptor de tema**, seguir
+   `prefers-color-scheme` significaba que la preferencia que alguien puso en su
+   sistema operativo —para todo— decidía el fondo de Sapyria sin que hubiera
+   elegido nada sobre este sitio. El resultado: quien tuviera el sistema en
+   oscuro veía la web en verde profundo.
+
+   La paleta oscura se conserva ENTERA y validada bajo `[data-theme="dark"]`:
+   el día que haya un interruptor, funciona sin tocar un solo color. */
 
 :root[data-theme="dark"] {
   color-scheme: dark;
