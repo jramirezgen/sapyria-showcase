@@ -1,155 +1,138 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowRight, Check, LogOut } from "lucide-react";
+import { ArrowRight, LogOut, Repeat } from "lucide-react";
 import { Card, EvidenceBadge, Eyebrow, Nota, Shell } from "@/components/ui/primitives";
+import { ModuloCard } from "@/components/modulo-card";
+import { ElegirPerfil } from "@/components/elegir-perfil";
 import { demoResult } from "@/lib/demo";
+import { cohorte, cohortes } from "@/lib/showcase";
 import { isSupabaseConfigured } from "@/lib/supabase";
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 
 export const dynamic = "force-dynamic";
 
-export default async function DashboardPage() {
+/**
+ * El espacio personal.
+ *
+ * Dos estados, y el primero es la entrada al producto:
+ *
+ *   · **sin perfil elegido** → pantalla de bienvenida y elección. Responde sola
+ *     a «¿qué ha pasado?» de quien acaba de entrar con Google y no recibió
+ *     ningún correo — porque con Google no hay ninguno que recibir.
+ *   · **con perfil** → el informe, en tres capas: lo que se lee de un vistazo,
+ *     lo que significa, y el dato con su límite.
+ *
+ * Antes esto encabezaba con un código `DEMO-####` y gritaba «MUESTRA SINTÉTICA»
+ * en cada bloque. Tenía que gritarlo: las cifras estaban inventadas. Ahora salen
+ * de una cohorte pública real, así que la procedencia se declara **una vez** y
+ * con dignidad, no en cada sección.
+ */
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ cambiar?: string }>;
+}) {
+  const quiereCambiar = (await searchParams).cambiar === "1";
   if (!isSupabaseConfigured) redirect("/login?error=setup");
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // Idempotente y forzado por `auth.uid()` en el servidor: crea únicamente una
-  // muestra sintética aislada para esta cuenta.
-  //
-  // El error de esta llamada SE MIRA. Antes se descartaba, y como el panel tenía
-  // un código de reserva que pintar, una base sin ni una tabla se veía
-  // exactamente igual que un aprovisionamiento correcto.
-  // El nombre YA estaba en la base: el trigger lo copia de `raw_user_meta_data`
-  // (Google lo manda como `name`, el formulario como `full_name`). Lo que faltaba
-  // era que la interfaz lo pidiera --- era un fallo de presentación, no de datos.
-  const { data: perfil } = await supabase
-    .from("profiles").select("full_name").eq("id", user.id).maybeSingle();
+  await supabase.rpc("claim_demo_sample");
 
-  const { error: errorRpc } = await supabase.rpc("claim_demo_sample");
-  const { data: sample, error: errorConsulta } = await supabase
-    .from("samples").select("sample_code, received_at, status")
-    .eq("user_id", user.id).eq("is_demo", true).limit(1).maybeSingle();
+  // La lista de perfiles sale del JSON del pipeline, no de la base: es el mismo
+  // dato que ya sirve el explorador público y así la pantalla de bienvenida
+  // funciona aunque la base aún no tenga la lista blanca. En la base, esa lista
+  // existe sólo como clave foránea --- para que el navegador no pueda escribir un
+  // identificador que no sea de los ocho.
+  const [{ data: perfilCuenta }, { data: muestra }, disponibles] = await Promise.all([
+    supabase.from("profiles").select("full_name").eq("id", user.id).maybeSingle(),
+    supabase.from("samples").select("perfil, received_at").eq("user_id", user.id).eq("is_demo", true).maybeSingle(),
+    cohortes(),
+  ]);
 
-  const fallo = errorRpc ?? errorConsulta;
-  const aprovisionada = Boolean(sample?.sample_code);
+  const nombreCompleto = perfilCuenta?.full_name?.trim() || user.email?.split("@")[0] || null;
+  const nombre = nombreCompleto ? nombreCompleto.split(" ")[0] : null;
 
-  // Si no hay nombre, el nombre local del correo. Nunca se inventa uno.
-  const nombre = perfil?.full_name?.trim() || user.email?.split("@")[0] || null;
-  const saludo = nombre ? nombre.split(" ")[0] : null;
+  const salir = (
+    <form action="/auth/signout" method="post">
+      <button type="submit" className="ink-2 inline-flex items-center gap-1.5 text-sm font-medium hover:opacity-80">
+        <LogOut size={15} /> Salir
+      </button>
+    </form>
+  );
 
-  /**
-   * Los cuatro pasos son el `enum sample_status` del esquema, en orden. Antes se
-   * pintaban los cuatro en verde SIEMPRE, sin mirar el estado: una muestra recién
-   * recibida se anunciaba como analizada. Un indicador que no puede decir «todavía
-   * no» no es un indicador.
-   */
-  const PASOS = [
-    { clave: "received", texto: "Recibida" },
-    { clave: "processing", texto: "Procesamiento" },
-    { clave: "analysis", texto: "Análisis" },
-    { clave: "ready", texto: "Listo" },
-  ] as const;
-  const estado = sample?.status ?? null;
-  const alcanzado = estado ? PASOS.findIndex((p) => p.clave === estado) : -1;
+  // ── Sin perfil: la bienvenida ────────────────────────────────────────────
+  if (!muestra?.perfil || quiereCambiar) {
+    return (
+      <Shell className="py-10 sm:py-16">
+        <div className="flex justify-end">{salir}</div>
+        <div className="mt-4">
+          <ElegirPerfil
+            perfiles={disponibles.map((c) => ({ id: c.id, titulo: c.titulo, clase: c.clase }))}
+            nombre={nombre}
+            yaEligio={Boolean(muestra?.perfil)}
+          />
+        </div>
+      </Shell>
+    );
+  }
 
-  const codigo = sample?.sample_code ?? null;
-  const recibida = sample?.received_at
-    ? new Intl.DateTimeFormat("es-PE", { day: "numeric", month: "short", year: "numeric" })
-        .format(new Date(sample.received_at))
-    : null;
+  // ── Con perfil: el informe ───────────────────────────────────────────────
+  const c = await cohorte(muestra.perfil);
+  const de = c.expresion_diferencial;
+  const activos = c.modulos.filter((m) => m.responde).length;
+  const pct = de.fraccion_significativa != null ? (de.fraccion_significativa * 100).toFixed(1) : null;
 
   return (
     <Shell className="py-10 sm:py-14">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="rounded-md px-2.5 py-1 font-mono text-[10px] font-medium tracking-[0.12em]"
-                style={{ background: "var(--surface-2)", color: "var(--ink-2)" }}>
-            DEMOSTRACIÓN · MUESTRA SINTÉTICA
-          </span>
-          {saludo ? <span className="ink-2 text-sm">Hola, {saludo}</span> : null}
-        </div>
-        <form action="/auth/signout" method="post">
-          <button type="submit" className="ink-2 inline-flex items-center gap-1.5 text-sm font-medium hover:opacity-80">
-            <LogOut size={15} /> Salir
-          </button>
-        </form>
+        <p className="ink-3 text-sm">{nombre ? `Hola, ${nombre}` : "Tu espacio"}</p>
+        {salir}
       </div>
 
-      <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <Eyebrow>Mi muestra</Eyebrow>
-          {codigo ? (
-            <>
-              <h1 className="font-mono text-3xl font-extrabold tracking-[-0.02em] sm:text-4xl">{codigo}</h1>
-              <p className="ink-2 mt-1 text-sm">Recibida el {recibida} · entorno de demostración</p>
-            </>
-          ) : (
-            <>
-              <h1 className="text-3xl font-extrabold tracking-[-0.02em] sm:text-4xl">Aún sin asignar</h1>
-              <p className="ink-2 mt-1 text-sm">Tu cuenta está activa; falta el aprovisionamiento.</p>
-            </>
-          )}
-        </div>
-        {estado === "ready" ? (
-          <span className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold"
-                style={{ background: "color-mix(in oklab, var(--good) 14%, transparent)", color: "var(--good)" }}>
-            <Check size={15} /> Análisis completado
-          </span>
-        ) : null}
+      {/* ── Nivel 1: el resumen que se entiende sin saber biología ────────── */}
+      <div className="mt-6">
+        <Eyebrow>Tu perfil de exploración</Eyebrow>
+        <h1 className="balance mt-2 max-w-3xl text-4xl font-extrabold leading-[1.06] tracking-[-0.035em] sm:text-5xl">
+          {c.titulo}
+        </h1>
+        <p className="ink-2 mt-4 max-w-2xl text-lg leading-relaxed pretty">
+          De {de.universo.toLocaleString("es")} reguladores medidos en sangre,{" "}
+          <strong>{de.significativos.toLocaleString("es")} se apartan</strong> de lo esperable
+          {pct ? ` — un ${pct} % del total` : ""}. {activos > 0
+            ? <>Y <strong>{activos} de {c.modulos.length} conjuntos biológicos</strong> se movieron de forma coordinada.</>
+            : <>Ningún conjunto biológico se movió de forma coordinada.</>}
+        </p>
+        <p className="ink-3 mt-3 max-w-2xl text-sm leading-relaxed pretty">
+          Perfil construido sobre el estudio público <span className="font-mono">{c.id}</span> ({c.contraste}),
+          procesado por este mismo sistema. Ninguna cifra está simulada.{" "}
+          <Link href="/dashboard?cambiar=1" className="font-medium underline">Cambiar de perfil</Link>
+        </p>
       </div>
 
-      {aprovisionada ? null : (
-        <div className="mt-8 grid gap-4">
-          <Nota tono="aviso">
-            <strong>Tu espacio todavía no tiene muestra asignada.</strong>
-            <p className="mt-1.5">
-              La sesión es válida y tu cuenta existe: lo que falta es el aprovisionamiento.
-              Hasta que haya una muestra tuya <strong>no mostramos ningún fenotipo</strong>,
-              ni conjuntos ni evidencia — ni siquiera de demostración. Una lectura sin
-              muestra detrás no es una lectura, y aquí no se enseña como si lo fuera.
-            </p>
-            {fallo ? (
-              <p className="ink-3 mt-2 font-mono text-xs">Detalle técnico: {fallo.message}</p>
-            ) : null}
-          </Nota>
-          <Card>
-            <h2 className="text-base font-bold">Mientras tanto</h2>
-            <p className="ink-2 mt-2 text-sm leading-relaxed pretty">
-              La demo pública sí tiene datos reales: ocho cohortes de acceso abierto
-              procesadas por el mismo pipeline, con sus cifras y figuras.
-            </p>
-            <Link href="/demo" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold"
-                  style={{ color: "var(--accent)" }}>
-              Abrir la demo pública <ArrowRight size={15} />
-            </Link>
-          </Card>
+      {/* ── Nivel 2: los conjuntos, explorables ───────────────────────────── */}
+      <section className="mt-12">
+        <h2 className="text-2xl font-extrabold tracking-[-0.02em]">Tus conjuntos biológicos</h2>
+        <p className="ink-2 mt-2 max-w-2xl text-sm leading-relaxed pretty">
+          Cada uno agrupa reguladores que trabajan en lo mismo. Despliega para ver qué
+          significa y cuál es su límite.
+        </p>
+        <div className="mt-5 grid gap-3">
+          {c.modulos.map((m) => (
+            <ModuloCard key={m.modulo} d={{ ...m, percentil_vs_sorteados: m.percentil_vs_sorteados ?? 0 }} />
+          ))}
         </div>
-      )}
+      </section>
 
-      {aprovisionada ? (
-        <>
-      <ol className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-4">
-        {PASOS.map((paso, i) => {
-          const hecho = alcanzado >= 0 && i <= alcanzado;
-          return (
-            <li key={paso.clave} aria-current={i === alcanzado ? "step" : undefined}
-                className="rounded-lg border px-3 py-2.5 text-sm"
-                style={{ borderColor: "var(--border)", background: hecho ? "var(--surface-1)" : "transparent" }}>
-              <span className="flex items-center gap-2" style={hecho ? undefined : { color: "var(--ink-3)" }}>
-                <i aria-hidden className="size-2 rounded-full"
-                   style={{ background: hecho ? "var(--good)" : "var(--ink-3)", opacity: hecho ? 1 : 0.45 }} />
-                {paso.texto}
-                <span className="sr-only">{hecho ? " (completado)" : " (pendiente)"}</span>
-              </span>
-            </li>
-          );
-        })}
-      </ol>
-
-      <section className="mt-10">
-        <Eyebrow>Fenotipo molecular</Eyebrow>
-        <Card className="mt-3">
+      {/* ── Las seis dimensiones, como marco ──────────────────────────────── */}
+      <section className="mt-12">
+        <h2 className="text-2xl font-extrabold tracking-[-0.02em]">Cómo se lee un perfil</h2>
+        <p className="ink-2 mt-2 max-w-2xl text-sm leading-relaxed pretty">
+          Sapyria no resume tu biología en una nota. La describe en seis dimensiones, y
+          cada una viaja con el peso que la sostiene.
+        </p>
+        <Card className="mt-5">
           <div className="grid gap-3">
             {demoResult.fenotipo.map((f) => (
               <div key={f.dimension}
@@ -164,31 +147,11 @@ export default async function DashboardPage() {
         </Card>
       </section>
 
-      <section className="mt-8 grid gap-6 lg:grid-cols-2">
+      {/* ── Nivel 3 y límites ─────────────────────────────────────────────── */}
+      <section className="mt-12 grid gap-5 lg:grid-cols-2">
         <div>
-          <Eyebrow>Conjuntos moleculares</Eyebrow>
-          <Card className="mt-3">
-            <div className="grid gap-3">
-              {demoResult.modulos.map((m) => (
-                <div key={m.nombre}
-                     className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b pb-3 last:border-0 last:pb-0"
-                     style={{ borderColor: "var(--border)" }}>
-                  <strong className="flex-1 text-sm">{m.nombre}</strong>
-                  <span className="ink-2 text-sm">{m.coordinacion}</span>
-                  <EvidenceBadge nivel={m.nivel} />
-                </div>
-              ))}
-            </div>
-            <p className="ink-3 mt-4 text-xs leading-relaxed pretty">
-              Sin puntaje a propósito. El solape entre estos conjuntos es del 55–60 %,
-              así que se encienden juntos: que uno se mueva no dice cuál es la causa.
-            </p>
-          </Card>
-        </div>
-
-        <div>
-          <Eyebrow>Cómo se clasifica la evidencia</Eyebrow>
-          <Card className="mt-3">
+          <h2 className="text-2xl font-extrabold tracking-[-0.02em]">Qué sostiene cada lectura</h2>
+          <Card className="mt-4">
             <div className="grid gap-3">
               {demoResult.evidencia.map((e) => (
                 <div key={e.nivel} className="border-b pb-3 last:border-0 last:pb-0"
@@ -200,35 +163,36 @@ export default async function DashboardPage() {
               ))}
             </div>
             <Link href="/evidencia" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold"
-                  style={{ color: "var(--accent)" }}>
+                  style={{ color: "var(--accent-strong)" }}>
               Ver la validación completa <ArrowRight size={15} />
             </Link>
           </Card>
         </div>
-      </section>
 
-      <section className="mt-8 grid gap-4">
-        <Nota tono="aviso">
-          <strong>Límites de esta lectura.</strong>
-          <ul className="mt-2 space-y-1.5">
-            {demoResult.limitaciones.map((l) => <li key={l}>· {l}</li>)}
-          </ul>
-        </Nota>
-        <Card>
-          <h2 className="text-base font-bold">¿Quieres ver esto sobre datos reales?</h2>
-          <p className="ink-2 mt-2 text-sm leading-relaxed pretty">
-            La demo pública corre sobre ocho cohortes de acceso abierto procesadas por
-            el mismo pipeline, con sus cifras y figuras reales.
-          </p>
-          <Link href="/demo" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold"
-                style={{ color: "var(--accent)" }}>
-            Abrir la demo pública <ArrowRight size={15} />
-          </Link>
-        </Card>
+        <div>
+          <h2 className="text-2xl font-extrabold tracking-[-0.02em]">Hasta dónde llega</h2>
+          <div className="mt-4 grid gap-4">
+            <Nota tono="aviso">
+              <ul className="space-y-1.5">
+                {demoResult.limitaciones.map((l) => <li key={l}>· {l}</li>)}
+              </ul>
+            </Nota>
+            <Card>
+              <h3 className="flex items-center gap-2 text-base font-bold">
+                <Repeat size={17} style={{ color: "var(--accent)" }} /> Explora otro perfil
+              </h3>
+              <p className="ink-2 mt-2 text-sm leading-relaxed pretty">
+                Cada uno de los ocho perfiles se lee distinto. Comparar es la mejor forma
+                de ver qué distingue Sapyria y qué no.
+              </p>
+              <Link href="/dashboard?cambiar=1" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold"
+                    style={{ color: "var(--accent-strong)" }}>
+                Cambiar de perfil <ArrowRight size={15} />
+              </Link>
+            </Card>
+          </div>
+        </div>
       </section>
-        </>
-      ) : null}
-
     </Shell>
   );
 }

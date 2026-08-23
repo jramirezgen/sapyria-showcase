@@ -32,6 +32,7 @@ import urllib.request
 
 CORREO = "prueba-panel@sapyria.com"
 NOMBRE = "Ana Torres"
+PERFIL = "GSE228540"   # Sepsis
 fallos: list[str] = []
 
 
@@ -91,22 +92,41 @@ def main() -> int:
         cookie = ("; ".join(f"sb-{ref}-auth-token.{i}={t}" for i, t in enumerate(trozos))
                   if len(trozos) > 1 else f"sb-{ref}-auth-token={crudo}")
 
-        req = urllib.request.Request(f"{a.web}/dashboard",
-                                     headers={"Cookie": cookie, "User-Agent": "Mozilla/5.0 (verificación Sapyria)"})
-        with urllib.request.urlopen(req, timeout=45) as r:
-            html = re.sub(r"<!--[^>]*-->", "", r.read().decode())   # ← la trampa de React
-        ok("GET /dashboard responde 200", r.status == 200)
-        ok("no rebotó a /login", "Espacio personal" not in html)
+        cabeceras = {"Cookie": cookie, "User-Agent": "Mozilla/5.0 (verificación Sapyria)"}
 
-        codigo = re.search(r"DEMO-\d{4}", html)
-        ok("muestra un código DEMO-####", bool(codigo), codigo.group(0) if codigo else "ninguno")
-        ok("y no es el falso DEMO-0000", bool(codigo) and codigo.group(0) != "DEMO-0000")
+        def pedir_panel():
+            req = urllib.request.Request(f"{a.web}/dashboard", headers=cabeceras)
+            with urllib.request.urlopen(req, timeout=45) as r:
+                # ← la trampa de React: separa el texto literal de la expresión
+                return r.status, re.sub(r"<!--[^>]*-->", "", r.read().decode())
+
+        print("\n── cuenta nueva: debe recibir la BIENVENIDA, no el informe ──")
+        estado, html = pedir_panel()
+        ok("GET /dashboard responde 200", estado == 200)
+        ok("no rebotó a /login", "Espacio personal" not in html)
+        ok("da la bienvenida por su nombre", f"Bienvenido, {NOMBRE.split()[0]}" in html)
+        ok("explica que con Google no hay correo que confirmar",
+           "no hay ningún correo que confirmar" in html)
+        ok("ofrece elegir perfil", "Elige por dónde empezar" in html)
+        ok("declara que los datos son reales", "Ninguna cifra está simulada" in html)
+        ok("todavía NO muestra el informe", "Tus conjuntos biológicos" not in html)
+
+        print("\n── elige un perfil ──")
+        st, elegido = api("/rest/v1/rpc/elegir_perfil", {"p_cohorte": PERFIL}, metodo="POST", token=sesion["access_token"])
+        ok("elegir_perfil funciona", st == 200 and elegido == PERFIL, f"HTTP {st} → {elegido}")
+
+        print("\n── ahora sí: el informe del perfil elegido ──")
+        estado, html = pedir_panel()
+        ok("GET /dashboard responde 200", estado == 200)
         ok("saluda por su nombre", f"Hola, {NOMBRE.split()[0]}" in html)
-        for texto in ("Análisis completado", "Fenotipo molecular", "Conjuntos moleculares",
-                      "Cómo se clasifica la evidencia", "Límites de esta lectura", "MUESTRA SINTÉTICA"):
+        ok("titula con el perfil elegido", "Sepsis" in html)
+        ok("declara la procedencia UNA vez", html.count("Ninguna cifra está simulada") == 1)
+        for texto in ("Tus conjuntos biológicos", "Tu respuesta inflamatoria", "Inflamación aguda",
+                      "Cómo se lee un perfil", "Qué sostiene cada lectura", "Hasta dónde llega"):
             ok(f"contiene «{texto}»", texto in html)
-        ok("marca el paso actual del proceso", 'aria-current="step"' in html)
-        ok("no aparece el aviso de «sin asignar»", "todavía no tiene muestra asignada" not in html)
+        ok("el límite NO se impone en el primer nivel", "Lo que esto no dice" not in html)
+        ok("ya no grita «muestra sintética»", "MUESTRA SINTÉTICA" not in html)
+        ok("ya no encabeza con un código de laboratorio", not re.search(r"DEMO-\d{4}", html))
     finally:
         if uid:
             st, _ = api(f"/auth/v1/admin/users/{uid}", metodo="DELETE", admin=True)

@@ -83,6 +83,41 @@ export default async function Home() {
       </section>
 
       {/* ── La diferencia ────────────────────────────────────────────────── */}
+      {/* ── El viaje de la muestra ───────────────────────────────────────
+          Antes se pasaba directo del titular a la separación señal/contexto/
+          límite, que es cierta pero es vocabulario de laboratorio. Quien llega
+          por primera vez necesita entender QUÉ LE PASA A SU MUESTRA, sin saber
+          biología, antes de que se le hable de rangos poblacionales. */}
+      <Section>
+        <Eyebrow>De la muestra a la interpretación</Eyebrow>
+        <H2>Qué ocurre con tu sangre,<br />paso a paso.</H2>
+        <p className="ink-2 mt-5 max-w-2xl text-base leading-relaxed pretty">
+          No recibes una lista de datos. Recibes una lectura de cómo está organizado
+          tu estado molecular ahora mismo, con lo que la sostiene y lo que no.
+        </p>
+
+        <ol className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {[
+            ["Tu muestra", "Un tubo de sangre. Nada invasivo, nada que preparar."],
+            ["Procesamiento", "Se leen los reguladores que circulan en ella: miles, en una sola pasada."],
+            ["Análisis", "Se compara con personas de referencia para ver qué se aparta y cuánto."],
+            ["Fenotipo molecular", "Lo que se aparta se organiza en conjuntos biológicos con sentido."],
+            ["Interpretación", "Cada lectura viaja con su nivel de evidencia — y con su límite."],
+          ].map(([titulo, texto], i) => (
+            <li key={titulo} className="relative rounded-xl border p-5"
+                style={{ borderColor: "var(--border)", background: "var(--surface-0)" }}>
+              <span aria-hidden
+                    className="grid size-7 place-items-center rounded-full font-mono text-xs font-bold"
+                    style={{ background: "var(--accent)", color: "var(--on-accent)" }}>
+                {i + 1}
+              </span>
+              <h3 className="mt-3 text-base font-bold tracking-[-0.02em]">{titulo}</h3>
+              <p className="ink-2 mt-1.5 text-sm leading-relaxed pretty">{texto}</p>
+            </li>
+          ))}
+        </ol>
+      </Section>
+
       <Section tono="alt">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-start">
           <div>

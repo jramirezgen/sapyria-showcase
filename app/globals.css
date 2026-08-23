@@ -56,9 +56,17 @@
      aprobación, elegidos para pasar AA. Y nunca estado sólo por color: siempre
      icono o etiqueta, como manda el manual. */
   --good:     #1f7a4d;   /* PROPUESTA · 5,32:1 */
-  --warning:  #ffdb58;   /* mostaza del manual · relleno, texto #002626 → 11,89:1 */
-  --serious:  #ff7f50;   /* coral del manual  · relleno, texto #002626 →  6,44:1 */
+  --warning:  #ffdb58;   /* mostaza del manual · RELLENO, texto #002626 → 11,89:1 */
+  --serious:  #ff7f50;   /* coral del manual  · RELLENO, texto #002626 →  6,44:1 */
   --critical: #b3402e;   /* PROPUESTA · 5,69:1 */
+
+  /* Marcas: puntos e indicadores pequeños. Mostaza y coral son colores de
+     RELLENO —el manual lo dice— y como punto sobre una superficie clara son
+     invisibles: 1,30:1 y 2,41:1 medidos. Un punto que no se ve no cumple su
+     función, aunque la etiqueta de texto lo acompañe. Estos son los mismos tonos
+     oscurecidos hasta pasar el 3:1 que exige un objeto gráfico. */
+  --warning-marca: #9c7800;   /* 3,97:1 */
+  --serious-marca: #c44e20;   /* 4,54:1 */
 
   --accent:        #257f80;   /* 4,74:1 sobre blanco */
   --on-accent:     #ffffff;   /* texto SOBRE el acento · 4,74:1 */
@@ -87,6 +95,8 @@
     --series-8: #e66767;
     --good:     #57c98d;   /* PROPUESTA · 7,77:1 */
     --critical: #ff8f73;   /* PROPUESTA · 7,22:1 */
+    --warning-marca: #ffdb58;   /* en oscuro la mostaza del manual ya da 10,03:1 */
+    --serious-marca: #ff9b78;   /* 6,59:1 */
     --accent:        #40e0d0;   /* el resalte del manual para fondo oscuro · 9,80:1 */
     --on-accent:     #002626;   /* en oscuro el acento es CLARO: el texto encima debe ser oscuro.
                                    Con blanco daba 1,64:1 --- ilegible. Así, 9,80:1. */
@@ -115,6 +125,8 @@
   --series-8: #e66767;
   --good:     #57c98d;   /* PROPUESTA · 7,77:1 */
   --critical: #ff8f73;   /* PROPUESTA · 7,22:1 */
+  --warning-marca: #ffdb58;
+  --serious-marca: #ff9b78;
   --accent:        #40e0d0;   /* el resalte del manual para fondo oscuro · 9,80:1 */
     --on-accent:     #002626;   /* en oscuro el acento es CLARO: el texto encima debe ser oscuro.
                                    Con blanco daba 1,64:1 --- ilegible. Así, 9,80:1. */

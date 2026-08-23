@@ -78,14 +78,20 @@ export function StatTile({
  * informe donde la evidencia es la mitad del mensaje eso no es aceptable.
  */
 export function EvidenceBadge({ nivel }: { nivel: string }) {
+  // Las etiquetas se escriben para quien lee, no para el laboratorio.
+  // «SIN ATRIBUCIÓN» era jerga opaca: dice la verdad y no comunica nada. «CAUSA
+  // ABIERTA» dice lo mismo —se observó algo y no se puede decir a qué se debe—
+  // en palabras que alguien entiende. Ablandar el significado sería otra cosa, y
+  // no se hace: ninguna etiqueta afirma más de lo que el sistema sostiene.
   const mapa: Record<string, { color: string; texto: string }> = {
     alta: { color: "var(--good)", texto: "EVIDENCIA ALTA" },
-    media: { color: "var(--warning)", texto: "EVIDENCIA MEDIA" },
-    baja: { color: "var(--serious)", texto: "EVIDENCIA BAJA" },
+    media: { color: "var(--warning-marca)", texto: "EVIDENCIA MEDIA" },
+    baja: { color: "var(--serious-marca)", texto: "EVIDENCIA LIMITADA" },
     insuficiente: { color: "var(--ink-3)", texto: "EVIDENCIA INSUFICIENTE" },
-    "no-evaluable": { color: "var(--ink-3)", texto: "NO EVALUABLE" },
-    "sin-atribucion": { color: "var(--serious)", texto: "SIN ATRIBUCIÓN" },
-    hipotesis: { color: "var(--warning)", texto: "HIPÓTESIS" },
+    "no-evaluable": { color: "var(--ink-3)", texto: "NO SE PUDO EVALUAR" },
+    "sin-senal": { color: "var(--ink-3)", texto: "SIN SEÑAL" },
+    "sin-atribucion": { color: "var(--warning-marca)", texto: "CAUSA ABIERTA" },
+    hipotesis: { color: "var(--warning-marca)", texto: "HIPÓTESIS" },
   };
   const v = mapa[nivel] ?? { color: "var(--ink-3)", texto: nivel.toUpperCase() };
   return (

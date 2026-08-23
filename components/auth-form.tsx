@@ -97,6 +97,13 @@ const estiloCampo = { borderColor: "var(--border-strong)", background: "var(--su
         Continuar con Google
       </button>
 
+      {/* Se dice ANTES de pulsar. Quien entra con Google se quedaba esperando un
+          correo de confirmación que nunca iba a llegar --- porque Google ya verificó
+          la dirección y no hay nada que confirmar. */}
+      <p className="ink-3 mt-2 text-center text-xs leading-relaxed">
+        Con Google entras directo: no hay correo que confirmar.
+      </p>
+
       <div className="my-4 flex items-center gap-3" aria-hidden>
         <i className="h-px flex-1" style={{ background: "var(--border)" }} />
         <span className="ink-3 text-xs">o</span>
