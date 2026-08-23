@@ -29,6 +29,12 @@ const TRADUCCIONES: ReadonlyArray<readonly [RegExp, string]> = [
    "La contraseña necesita al menos 8 caracteres."],
   [/(rate limit|you can only request this after)/i,
    "Pediste varios correos seguidos. Espera un minuto y vuelve a intentarlo."],
+  [/could not find the (function|table)|schema cache|PGRST(202|205)/i,
+   "Esta parte del espacio todavía se está preparando. Vuelve en un momento; no es culpa tuya."],
+  [/perfil no reconocido/i,
+   "Ese perfil no está disponible. Elige otro de la lista."],
+  [/hace falta una sesión/i,
+   "Tu sesión caducó. Vuelve a entrar y lo retomamos donde estabas."],
   [/redirect_to.*not allowed|invalid redirect/i,
    "Este enlace apunta a una dirección que el sistema no reconoce. Avísanos: es un fallo nuestro de configuración, no tuyo."],
 ];
