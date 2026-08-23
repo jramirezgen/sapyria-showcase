@@ -6,6 +6,11 @@ no se pudo comprobar se dice, no se rellena.
 
 ---
 
+> **Cierre 2026-08-23:** listo para usuarios. Las dos pruebas automáticas pasan
+> enteras contra producción, hay aviso de privacidad, y lo único que queda
+> abierto son entregables de marca y la comprobación de que el correo llega al
+> buzón. Detalle abajo.
+
 ## A) Estado actual funcional
 
 ### Acceso y aprovisionamiento — **verificado de punta a punta**
@@ -42,10 +47,35 @@ configurado hace fallar el `signUp`, esto **prueba que Resend respondió**.
 > registro de entregas (`restricted_api_key`). Se comprueba desde el panel de
 > Resend, o registrando una dirección real.
 
-### Rutas públicas
+### El panel, comprobado en producción con sesión real
 
-Las ocho responden 200; `/dashboard` sin sesión redirige a `/login`; un `?code=`
-extraviado en cualquier ruta se reenvía al canje.
+`scripts/prueba_panel_produccion.py` pide `/dashboard` con cookie de sesión —el
+panel es un componente de servidor, así que **no se puede verificar buscando
+texto en el JavaScript del navegador**—. Las 16 comprobaciones pasan: código
+`DEMO-####` de la base, saludo por su nombre, fenotipo, conjuntos, evidencia,
+límites, rótulo de muestra sintética y el paso actual del proceso marcado.
+
+### Errores y cierre de sesión
+
+| Caso | Resultado |
+| --- | --- |
+| contraseña incorrecta | ✅ rechazada, con mensaje traducido al castellano |
+| cuenta sin confirmar | ✅ no entra, y dice por qué |
+| `POST /auth/signout` | ✅ **303 y BORRA la cookie** — no sólo cambia de página |
+
+### Rutas y activos
+
+Las **nueve** rutas responden 200 (incluida `/privacidad`), más `robots.txt` y
+`sitemap.xml`; `/dashboard` sin sesión redirige a `/login`; un `?code=` extraviado
+en cualquier ruta se reenvía al canje; favicon, imagen social y símbolo de marca
+sirven. **Ningún enlace interno roto.**
+
+### Privacidad
+
+`/privacidad` describe lo que el código **hace**: qué se guarda (correo, nombre,
+código de muestra sintética), qué **no** (ningún dato ómico ni clínico, ninguna
+analítica ni rastreador — comprobado buscándolos en el repositorio; la única
+cookie es la de sesión), dónde vive, quién puede verlo y cómo se borra.
 
 ---
 
@@ -60,10 +90,13 @@ extraviado en cualquier ruta se reenvía al canje.
 | 5 | Igual en los distintivos de criterio: blanco sobre `good`/`critical` oscuros daba **2,07:1** y **2,23:1** | ✅ corregido con `--on-status` |
 | 6 | Los campos de formulario usaban el borde decorativo (**1,86:1**), cuando el borde **es** el límite del control y pide 3:1 | ✅ corregido con `--border-strong` |
 | 7 | Tipografía **Manrope**, fuera del manual | ✅ ahora Inter |
+| 8 | La cifra destacada de cada cohorte usaba el **color de serie** de su clase: **3,73:1** sobre el fondo oscuro, bajo AA — y una cifra es texto, lleva token de tinta | ✅ corregido — acento de marca, 8,26:1 |
+| 9 | **No había aviso de privacidad** y la web pide correo y nombre | ✅ `/privacidad` |
 
 ### Lo que sigue abierto
 
-- **Entrega real del correo**, por lo dicho arriba.
+- **Entrega real del correo**, por lo dicho arriba. Es lo único del flujo de
+  usuario que no se pudo cerrar desde aquí.
 - **Los activos de marca derivados están PENDIENTES DE TU APROBACIÓN.** El manual
   lo exige explícitamente. Ver sección D.
 - **`good` y `critical` son propuesta**: el manual v0.1 no define colores de
@@ -185,3 +218,20 @@ nombre en Inter, hasta que exista la versión inversa aprobada.
 
 **Nunca estado sólo por color.** Cada distintivo de evidencia lleva punto **y**
 etiqueta; cada criterio, icono **y** texto.
+
+
+---
+
+## Nota de método: tres veces el fallo estaba en la comprobación
+
+Vale la pena dejarlo escrito, porque cuesta tiempo cada vez:
+
+1. Buscar el favicon en `/icon.png` — la ruta real es `/icon?<hash>`.
+2. Buscar texto del panel en el *bundle* de JavaScript — es un componente de
+   servidor y su texto **nunca** llega al navegador. Hay que pedir la página con
+   sesión.
+3. Buscar `Hola, Ana` en el HTML — React inserta `<!--…-->` entre un texto
+   literal y una expresión, así que llega como `Hola, <!-- -->Ana`.
+
+Las tres daban «no funciona» sobre algo que funcionaba. Los scripts de
+`scripts/` encapsulan las tres para que no se repitan.
