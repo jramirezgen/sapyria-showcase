@@ -1,0 +1,134 @@
+{
+ "id": "GSE131174",
+ "clase": "infecciosa",
+ "titulo": "Tuberculosis",
+ "contraste": "TB activa vs expuesto no infectado",
+ "resumen": "Enfermedad activa, latente, tratada y expuesto sin infección.",
+ "expresion_diferencial": {
+  "universo": 200,
+  "significativos": 0,
+  "fraccion_significativa": 0.0,
+  "al_alza": 0,
+  "a_la_baja": 0,
+  "top": [
+   {
+    "id": "hsa-mir-30a",
+    "efecto": 1.794,
+    "q": 0.949,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-mir-144",
+    "efecto": -1.317,
+    "q": 0.99,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-mir-96",
+    "efecto": -1.222,
+    "q": 0.99,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-mir-196b",
+    "efecto": -1.092,
+    "q": 0.77,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-mir-126",
+    "efecto": -1.079,
+    "q": 0.99,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-mir-98",
+    "efecto": -1.067,
+    "q": 0.99,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-mir-15a",
+    "efecto": -0.922,
+    "q": 0.99,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-mir-20a",
+    "efecto": -0.922,
+    "q": 0.99,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-mir-127",
+    "efecto": -0.765,
+    "q": 0.99,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-mir-150",
+    "efecto": -0.716,
+    "q": 0.99,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-mir-26b",
+    "efecto": -0.674,
+    "q": 0.99,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-mir-182",
+    "efecto": -0.674,
+    "q": 0.99,
+    "direccion": "DECREASED"
+   }
+  ]
+ },
+ "modulos": [
+  {
+   "modulo": "Inflamación aguda",
+   "responde": false,
+   "p": 0.27969,
+   "percentil_vs_sorteados": 74.0,
+   "miembros": 3,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Reparación y remodelado",
+   "responde": false,
+   "p": 0.27969,
+   "percentil_vs_sorteados": 64.0,
+   "miembros": 3,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Estrés celular",
+   "responde": false,
+   "p": 0.69484,
+   "percentil_vs_sorteados": 20.0,
+   "miembros": 4,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  }
+ ],
+ "figuras": [
+  {
+   "archivo": "figures/GSE131174/abundance_heatmap.png",
+   "tipo": "abundance"
+  },
+  {
+   "archivo": "figures/GSE131174/pca_samples.png",
+   "tipo": "pca"
+  },
+  {
+   "archivo": "figures/GSE131174/reference_group_stability.png",
+   "tipo": "reference"
+  }
+ ]
+}

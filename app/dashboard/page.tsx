@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowRight, Check, CircleAlert, Clock3, Dna, FileText, LogOut, Microscope, ShieldCheck } from "lucide-react";
-import { Brand } from "@/components/brand";
+import { ArrowRight, Check, LogOut } from "lucide-react";
+import { Card, EvidenceBadge, Eyebrow, Nota, Shell } from "@/components/ui/primitives";
 import { demoResult } from "@/lib/demo";
 import { isSupabaseConfigured } from "@/lib/supabase";
 import { createSupabaseServerClient } from "@/lib/supabase-server";
@@ -13,14 +13,92 @@ export default async function DashboardPage() {
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
-  // Provisioning is idempotent and server-enforced by auth.uid(); it creates
-  // only an isolated synthetic result for this authenticated demo account.
+
+  // Idempotente y forzado por `auth.uid()` en el servidor: crea únicamente una
+  // muestra sintética aislada para esta cuenta.
   await supabase.rpc("claim_demo_sample");
-  const { data: sample } = await supabase.from("samples").select("id, sample_code, received_at, status").eq("user_id", user.id).eq("is_demo", true).limit(1).maybeSingle();
-  const { data: storedResult } = sample ? await supabase.from("demo_results").select("phenotype_summary").eq("sample_id", sample.id).maybeSingle() : { data: null };
-  const sampleCode = sample?.sample_code ?? demoResult.sampleCode;
-  const receivedAt = sample?.received_at ? new Intl.DateTimeFormat("es-PE", { day: "numeric", month: "short", year: "numeric" }).format(new Date(sample.received_at)) : demoResult.receivedAt;
-  const status = sample?.status === "ready" ? "Análisis completado" : demoResult.status;
-  const phenotype = storedResult?.phenotype_summary ?? demoResult.phenotype;
-  return <main className="dashboard"><header className="dashboard-nav"><Brand /><div><span className="demo-chip">DEMO DE PRODUCTO</span><Link href="/login" className="logout"><LogOut size={15} /> Salir</Link></div></header><div className="dashboard-layout"><aside><p>MI ESPACIO</p><a className="side-active" href="#muestra"><Dna size={17} /> Mi muestra</a><a href="#evidencia"><Microscope size={17} /> Evidencia</a><a href="#alcance"><ShieldCheck size={17} /> Alcance</a><div className="help"><strong>¿Tienes una pregunta?</strong><p>La lectura molecular se explora siempre dentro de sus límites de evidencia.</p><a href="mailto:hola@sapyria.com">Hablar con Sapyria <ArrowRight size={13} /></a></div></aside><section className="dashboard-content" id="muestra"><div className="dashboard-heading"><div><p className="section-label">MI MUESTRA</p><h1>{sampleCode}</h1><p>Recibida el {receivedAt} · Entorno de demostración</p></div><div className="completed"><Check size={16} /> {status}</div></div><div className="progress"><div><span>Recibido</span><i className="done" /></div><div><span>Procesamiento</span><i className="done" /></div><div><span>Análisis</span><i className="done" /></div><div><span>Listo</span><i className="done" /></div></div><article className="phenotype-summary"><span>FENOTIPO MOLECULAR INFERIDO</span><h2>{phenotype}</h2><p>Esta lectura integra señales de demostración y no es un diagnóstico, pronóstico ni recomendación clínica.</p></article><div className="result-grid"><article><div className="card-icon"><Dna size={18} /></div><span>COMPOSICIÓN CELULAR</span>{demoResult.cellular.map(([name, status, tone]) => <div className="status-row" key={name}><b>{name}</b><small className={tone}>{status}</small></div>)}</article><article><div className="card-icon"><Microscope size={18} /></div><span>ESTADO REGULATORIO</span><h3>Señal coordinada</h3><p>Patrón demostrativo compatible con actividad regulatoria que merece exploración contextual.</p><div className="mini-wave">{Array.from({ length: 12 }).map((_, i) => <i key={i} />)}</div></article></div><section className="modules"><div className="section-title"><div><p className="section-label">MÓDULOS MOLECULARES</p><h2>Señales que componen la lectura</h2></div><span>3 módulos</span></div>{demoResult.modules.map(([name, state, score]) => <article key={name}><div><strong>{name}</strong><p>{state}</p></div><div className="module-bar"><i style={{ width: `${Number(score) * 100}%` }} /></div><b>{score}</b><ArrowRight size={16} /></article>)}</section><section className="dashboard-evidence" id="evidencia"><FileText size={20} /><div><p className="section-label">EVIDENCIA DISPONIBLE</p><h2>Qué sostiene esta interpretación</h2><p>La demo diferencia de forma explícita entre señal observada, hipótesis derivada y evidencia disponible. Ninguna de estas capas equivale a confirmación clínica.</p><Link href="#alcance">Ver limitaciones <ArrowRight size={15} /></Link></div></section><section className="limitations" id="alcance"><CircleAlert size={20} /><div><h2>Limitaciones importantes</h2><p>Este espacio muestra resultados sintéticos. Sapyria no declara diagnóstico ni valida una condición clínica desde esta interfaz. Los análisis pesados y datos primarios permanecen en infraestructura local controlada.</p></div></section></section></div></main>;
+  const { data: sample } = await supabase
+    .from("samples").select("sample_code, received_at, status")
+    .eq("user_id", user.id).eq("is_demo", true).limit(1).maybeSingle();
+
+  const codigo = sample?.sample_code ?? demoResult.sampleCode;
+  const recibida = sample?.received_at
+    ? new Intl.DateTimeFormat("es-PE", { day: "numeric", month: "short", year: "numeric" })
+        .format(new Date(sample.received_at))
+    : demoResult.receivedAt;
+
+  return (
+    <Shell className="py-10 sm:py-14">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <span className="rounded-md px-2.5 py-1 font-mono text-[10px] font-medium tracking-[0.12em]"
+              style={{ background: "var(--surface-2)", color: "var(--ink-2)" }}>
+          DEMOSTRACIÓN · MUESTRA SINTÉTICA
+        </span>
+        <Link href="/login" className="ink-2 inline-flex items-center gap-1.5 text-sm font-medium">
+          <LogOut size={15} /> Salir
+        </Link>
+      </div>
+
+      <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <Eyebrow>Mi muestra</Eyebrow>
+          <h1 className="font-mono text-3xl font-extrabold tracking-[-0.02em] sm:text-4xl">{codigo}</h1>
+          <p className="ink-2 mt-1 text-sm">Recibida el {recibida} · entorno de demostración</p>
+        </div>
+        <span className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold"
+              style={{ background: "color-mix(in oklab, var(--good) 14%, transparent)", color: "var(--good)" }}>
+          <Check size={15} /> {sample?.status === "ready" ? "Análisis completado" : demoResult.status}
+        </span>
+      </div>
+
+      <ol className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {["Recibido", "Procesamiento", "Análisis", "Listo"].map((paso) => (
+          <li key={paso} className="rounded-lg border px-3 py-2.5 text-sm"
+              style={{ borderColor: "var(--border)" }}>
+            <span className="flex items-center gap-2">
+              <i aria-hidden className="size-2 rounded-full" style={{ background: "var(--good)" }} />
+              {paso}
+            </span>
+          </li>
+        ))}
+      </ol>
+
+      <section className="mt-10">
+        <Eyebrow>Fenotipo molecular</Eyebrow>
+        <Card className="mt-3">
+          <div className="grid gap-3">
+            {demoResult.fenotipo.map((f) => (
+              <div key={f.dimension}
+                   className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b pb-3 last:border-0 last:pb-0"
+                   style={{ borderColor: "var(--border)" }}>
+                <strong className="min-w-[11rem] text-sm">{f.dimension}</strong>
+                <EvidenceBadge nivel={f.nivel} />
+                <span className="ink-2 flex-1 text-sm leading-snug pretty">{f.detalle}</span>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </section>
+
+      <section className="mt-8 grid gap-4">
+        <Nota tono="aviso">
+          <strong>Límites de esta lectura.</strong>
+          <ul className="mt-2 space-y-1.5">
+            {demoResult.limitaciones.map((l) => <li key={l}>· {l}</li>)}
+          </ul>
+        </Nota>
+        <Card>
+          <h2 className="text-base font-bold">¿Quieres ver esto sobre datos reales?</h2>
+          <p className="ink-2 mt-2 text-sm leading-relaxed pretty">
+            La demo pública corre sobre ocho cohortes de acceso abierto procesadas por
+            el mismo pipeline, con sus cifras y figuras reales.
+          </p>
+          <Link href="/demo" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold"
+                style={{ color: "var(--accent)" }}>
+            Abrir la demo pública <ArrowRight size={15} />
+          </Link>
+        </Card>
+      </section>
+    </Shell>
+  );
 }

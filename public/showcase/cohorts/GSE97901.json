@@ -1,0 +1,158 @@
+{
+ "id": "GSE97901",
+ "clase": "oncológica",
+ "titulo": "Cáncer de próstata",
+ "contraste": "cáncer de próstata vs control",
+ "resumen": "Tumor sólido: la señal en sangre es indirecta.",
+ "expresion_diferencial": {
+  "universo": 1205,
+  "significativos": 0,
+  "fraccion_significativa": 0.0,
+  "al_alza": 0,
+  "a_la_baja": 0,
+  "top": [
+   {
+    "id": "hsa-miR-5582-3p",
+    "efecto": 2.361,
+    "q": 0.999,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-329-3p",
+    "efecto": -1.987,
+    "q": 0.999,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-32-5p",
+    "efecto": 1.923,
+    "q": 0.318,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-654-5p",
+    "efecto": -1.912,
+    "q": 0.999,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-500b-3p",
+    "efecto": -1.876,
+    "q": 0.999,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-204-5p",
+    "efecto": -1.803,
+    "q": 0.999,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-493-3p",
+    "efecto": -1.783,
+    "q": 0.999,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-4676-3p",
+    "efecto": -1.719,
+    "q": 0.999,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-487b-3p",
+    "efecto": -1.718,
+    "q": 0.999,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-let-7f-2-3p",
+    "efecto": -1.524,
+    "q": 0.999,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-6885-3p",
+    "efecto": -1.427,
+    "q": 0.999,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-122-5p",
+    "efecto": -1.426,
+    "q": 0.999,
+    "direccion": "DECREASED"
+   }
+  ]
+ },
+ "modulos": [
+  {
+   "modulo": "Inflamación aguda",
+   "responde": true,
+   "p": 0.00689,
+   "percentil_vs_sorteados": 100.0,
+   "miembros": 184,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Reparación y remodelado",
+   "responde": true,
+   "p": 0.00916,
+   "percentil_vs_sorteados": 98.0,
+   "miembros": 190,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Estrés celular",
+   "responde": true,
+   "p": 0.00939,
+   "percentil_vs_sorteados": 100.0,
+   "miembros": 205,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Regulación inmune",
+   "responde": false,
+   "p": 0.16481,
+   "percentil_vs_sorteados": 82.0,
+   "miembros": 59,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 3,
+   "de_condiciones": 7
+  },
+  {
+   "modulo": "Metabolismo",
+   "responde": false,
+   "p": 0.36284,
+   "percentil_vs_sorteados": 66.0,
+   "miembros": 36,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 2,
+   "de_condiciones": 7
+  }
+ ],
+ "figuras": [
+  {
+   "archivo": "figures/GSE97901/abundance_heatmap.png",
+   "tipo": "abundance"
+  },
+  {
+   "archivo": "figures/GSE97901/pca_samples.png",
+   "tipo": "pca"
+  },
+  {
+   "archivo": "figures/GSE97901/reference_group_stability.png",
+   "tipo": "reference"
+  },
+  {
+   "archivo": "figures/GSE97901/volcano_control_vs_prostate_cancer.png",
+   "tipo": "volcano"
+  }
+ ]
+}

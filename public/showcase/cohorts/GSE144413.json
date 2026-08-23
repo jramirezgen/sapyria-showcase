@@ -1,0 +1,141 @@
+{
+ "id": "GSE144413",
+ "clase": "infecciosa",
+ "titulo": "Malaria",
+ "contraste": "malaria sintomática vs infección resuelta",
+ "resumen": "Cuatro estadios sucesivos de la misma infección por *P. falciparum*: sintomática, asintomática, tratada y resuelta.",
+ "expresion_diferencial": {
+  "universo": 320,
+  "significativos": 115,
+  "fraccion_significativa": 0.3594,
+  "al_alza": 58,
+  "a_la_baja": 57,
+  "top": [
+   {
+    "id": "hsa-mir-126-5p",
+    "efecto": 2.711,
+    "q": 0.000117,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-mir-30e-3p",
+    "efecto": 1.958,
+    "q": 6.64e-05,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-mir-3195",
+    "efecto": 1.872,
+    "q": 0.0103,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-mir-6087",
+    "efecto": 1.822,
+    "q": 0.0105,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-mir-6089",
+    "efecto": 1.532,
+    "q": 0.0112,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-mir-150-3p",
+    "efecto": -1.373,
+    "q": 3.37e-05,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-let-7f-5p",
+    "efecto": 1.318,
+    "q": 2.93e-14,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-mir-181c-5p",
+    "efecto": 1.265,
+    "q": 0.00012,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-mir-664a-3p",
+    "efecto": 1.24,
+    "q": 3.96e-05,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-mir-598-3p",
+    "efecto": 1.216,
+    "q": 0.000191,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-mir-32-5p",
+    "efecto": 1.189,
+    "q": 0.000168,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-mir-150-5p",
+    "efecto": -1.153,
+    "q": 0.000646,
+    "direccion": "DECREASED"
+   }
+  ]
+ },
+ "modulos": [
+  {
+   "modulo": "Regulación inmune",
+   "responde": false,
+   "p": 0.33039,
+   "percentil_vs_sorteados": 72.0,
+   "miembros": 36,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 3,
+   "de_condiciones": 7
+  },
+  {
+   "modulo": "Metabolismo",
+   "responde": false,
+   "p": 0.89543,
+   "percentil_vs_sorteados": 4.0,
+   "miembros": 24,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 2,
+   "de_condiciones": 7
+  },
+  {
+   "modulo": "Reparación y remodelado",
+   "responde": false,
+   "p": 0.97133,
+   "percentil_vs_sorteados": 0.0,
+   "miembros": 108,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Estrés celular",
+   "responde": false,
+   "p": 0.97251,
+   "percentil_vs_sorteados": 2.0,
+   "miembros": 115,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Inflamación aguda",
+   "responde": false,
+   "p": 0.9897,
+   "percentil_vs_sorteados": 2.0,
+   "miembros": 111,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  }
+ ],
+ "figuras": []
+}

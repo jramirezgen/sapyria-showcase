@@ -1,0 +1,158 @@
+{
+ "id": "GSE46579",
+ "clase": "neurodegenerativa",
+ "titulo": "Alzheimer",
+ "contraste": "Alzheimer vs control",
+ "resumen": "Enfermedad neurodegenerativa de curso lento.",
+ "expresion_diferencial": {
+  "universo": 417,
+  "significativos": 131,
+  "fraccion_significativa": 0.3141,
+  "al_alza": 62,
+  "a_la_baja": 69,
+  "top": [
+   {
+    "id": "hsa-miR-32-5p",
+    "efecto": -1.812,
+    "q": 0.00431,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-144-5p",
+    "efecto": -1.797,
+    "q": 1.01e-06,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-3200-3p",
+    "efecto": -1.706,
+    "q": 5.25e-08,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-148a-3p",
+    "efecto": -1.661,
+    "q": 3.39e-07,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-101-3p",
+    "efecto": -1.617,
+    "q": 0.000281,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-660-5p",
+    "efecto": -1.542,
+    "q": 5.44e-06,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-199a-3p",
+    "efecto": -1.536,
+    "q": 2.7e-06,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-199b-3p",
+    "efecto": -1.536,
+    "q": 2.7e-06,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-17-3p",
+    "efecto": -1.529,
+    "q": 5.43e-07,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-15a-5p",
+    "efecto": -1.443,
+    "q": 1.74e-07,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-33b-5p",
+    "efecto": -1.397,
+    "q": 0.0476,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-190a",
+    "efecto": -1.389,
+    "q": 0.00156,
+    "direccion": "DECREASED"
+   }
+  ]
+ },
+ "modulos": [
+  {
+   "modulo": "Inflamación aguda",
+   "responde": false,
+   "p": 0.17161,
+   "percentil_vs_sorteados": 88.0,
+   "miembros": 110,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Reparación y remodelado",
+   "responde": false,
+   "p": 0.35638,
+   "percentil_vs_sorteados": 54.0,
+   "miembros": 116,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Estrés celular",
+   "responde": false,
+   "p": 0.35695,
+   "percentil_vs_sorteados": 50.0,
+   "miembros": 121,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Regulación inmune",
+   "responde": false,
+   "p": 0.70403,
+   "percentil_vs_sorteados": 22.0,
+   "miembros": 36,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 3,
+   "de_condiciones": 7
+  },
+  {
+   "modulo": "Metabolismo",
+   "responde": false,
+   "p": 0.88154,
+   "percentil_vs_sorteados": 10.0,
+   "miembros": 23,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 2,
+   "de_condiciones": 7
+  }
+ ],
+ "figuras": [
+  {
+   "archivo": "figures/GSE46579/abundance_heatmap.png",
+   "tipo": "abundance"
+  },
+  {
+   "archivo": "figures/GSE46579/pca_samples.png",
+   "tipo": "pca"
+  },
+  {
+   "archivo": "figures/GSE46579/reference_group_stability.png",
+   "tipo": "reference"
+  },
+  {
+   "archivo": "figures/GSE46579/volcano_AD_vs_Control.png",
+   "tipo": "volcano"
+  }
+ ]
+}

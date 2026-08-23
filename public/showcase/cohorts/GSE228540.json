@@ -1,0 +1,158 @@
+{
+ "id": "GSE228540",
+ "clase": "infecciosa",
+ "titulo": "Sepsis",
+ "contraste": "sepsis vs personas sanas",
+ "resumen": "Respuesta inflamatoria sistémica aguda. Es la cohorte con más señal diferencial de las ocho.",
+ "expresion_diferencial": {
+  "universo": 4110,
+  "significativos": 191,
+  "fraccion_significativa": 0.0465,
+  "al_alza": 84,
+  "a_la_baja": 107,
+  "top": [
+   {
+    "id": "hsa-miR-3168",
+    "efecto": 4.379,
+    "q": 4.07e-30,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-199b-5p",
+    "efecto": -3.903,
+    "q": 3.25e-08,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-582-3p",
+    "efecto": -3.827,
+    "q": 4.58e-06,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-1302",
+    "efecto": -3.488,
+    "q": 0.549,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-5701",
+    "efecto": -3.457,
+    "q": 6.73e-08,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-143-3p",
+    "efecto": -3.419,
+    "q": 4.96e-13,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-novelmiR-2340-5p",
+    "efecto": -3.186,
+    "q": 0.0101,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-novelmiR-953-5p",
+    "efecto": -3.153,
+    "q": 0.0252,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-548al",
+    "efecto": -3.131,
+    "q": 0.0457,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-2115-3p",
+    "efecto": -3.078,
+    "q": 0.00364,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-novelmiR-1848-5p",
+    "efecto": -2.817,
+    "q": 0.0306,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-145-3p",
+    "efecto": -2.807,
+    "q": 0.000355,
+    "direccion": "DECREASED"
+   }
+  ]
+ },
+ "modulos": [
+  {
+   "modulo": "Estrés celular",
+   "responde": true,
+   "p": 1e-05,
+   "percentil_vs_sorteados": 100.0,
+   "miembros": 178,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Inflamación aguda",
+   "responde": true,
+   "p": 4e-05,
+   "percentil_vs_sorteados": 100.0,
+   "miembros": 165,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Reparación y remodelado",
+   "responde": true,
+   "p": 0.00066,
+   "percentil_vs_sorteados": 100.0,
+   "miembros": 169,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Regulación inmune",
+   "responde": true,
+   "p": 0.00134,
+   "percentil_vs_sorteados": 100.0,
+   "miembros": 53,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 3,
+   "de_condiciones": 7
+  },
+  {
+   "modulo": "Metabolismo",
+   "responde": false,
+   "p": 0.21668,
+   "percentil_vs_sorteados": 88.0,
+   "miembros": 34,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 2,
+   "de_condiciones": 7
+  }
+ ],
+ "figuras": [
+  {
+   "archivo": "figures/GSE228540/abundance_heatmap.png",
+   "tipo": "abundance"
+  },
+  {
+   "archivo": "figures/GSE228540/pca_samples.png",
+   "tipo": "pca"
+  },
+  {
+   "archivo": "figures/GSE228540/reference_group_stability.png",
+   "tipo": "reference"
+  },
+  {
+   "archivo": "figures/GSE228540/volcano_healthy_control_vs_sepsis.png",
+   "tipo": "volcano"
+  }
+ ]
+}

@@ -1,0 +1,84 @@
+{
+ "cohortes": [
+  {
+   "id": "GSE228540",
+   "clase": "infecciosa",
+   "titulo": "Sepsis",
+   "contraste": "sepsis vs personas sanas",
+   "universo": 4110,
+   "significativos": 191,
+   "fraccion_significativa": 0.0465,
+   "figuras": 4
+  },
+  {
+   "id": "GSE144413",
+   "clase": "infecciosa",
+   "titulo": "Malaria",
+   "contraste": "malaria sintomática vs infección resuelta",
+   "universo": 320,
+   "significativos": 115,
+   "fraccion_significativa": 0.3594,
+   "figuras": 0
+  },
+  {
+   "id": "GSE131174",
+   "clase": "infecciosa",
+   "titulo": "Tuberculosis",
+   "contraste": "TB activa vs expuesto no infectado",
+   "universo": 200,
+   "significativos": 0,
+   "fraccion_significativa": 0.0,
+   "figuras": 3
+  },
+  {
+   "id": "GSE46579",
+   "clase": "neurodegenerativa",
+   "titulo": "Alzheimer",
+   "contraste": "Alzheimer vs control",
+   "universo": 417,
+   "significativos": 131,
+   "fraccion_significativa": 0.3141,
+   "figuras": 4
+  },
+  {
+   "id": "GSE140069",
+   "clase": "neurodegenerativa",
+   "titulo": "Creutzfeldt-Jakob esporádica",
+   "contraste": "sCJD vs control",
+   "universo": 865,
+   "significativos": 89,
+   "fraccion_significativa": 0.1029,
+   "figuras": 4
+  },
+  {
+   "id": "GSE128079",
+   "clase": "oncológica",
+   "titulo": "Leucemia mieloide aguda",
+   "contraste": "AML vs control",
+   "universo": 1413,
+   "significativos": 0,
+   "fraccion_significativa": 0.0,
+   "figuras": 4
+  },
+  {
+   "id": "GSE97901",
+   "clase": "oncológica",
+   "titulo": "Cáncer de próstata",
+   "contraste": "cáncer de próstata vs control",
+   "universo": 1205,
+   "significativos": 0,
+   "fraccion_significativa": 0.0,
+   "figuras": 4
+  },
+  {
+   "id": "GSE115816",
+   "clase": "inmune",
+   "titulo": "Rechazo de injerto renal",
+   "contraste": "rechazo vs función estable",
+   "universo": 703,
+   "significativos": 2,
+   "fraccion_significativa": 0.0028,
+   "figuras": 4
+  }
+ ]
+}

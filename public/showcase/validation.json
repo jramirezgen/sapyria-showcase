@@ -1,0 +1,118 @@
+{
+ "modulos": [
+  {
+   "label": "Inflamación aguda",
+   "veredicto": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "calla_en": 4,
+   "condiciones_evaluadas": 8,
+   "clases_reproducibles": []
+  },
+  {
+   "label": "Metabolismo",
+   "veredicto": "SIN_EVIDENCIA",
+   "responde_en": 2,
+   "calla_en": 5,
+   "condiciones_evaluadas": 7,
+   "clases_reproducibles": []
+  },
+  {
+   "label": "Estrés celular",
+   "veredicto": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "calla_en": 4,
+   "condiciones_evaluadas": 8,
+   "clases_reproducibles": []
+  },
+  {
+   "label": "Reparación y remodelado",
+   "veredicto": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "calla_en": 4,
+   "condiciones_evaluadas": 8,
+   "clases_reproducibles": []
+  },
+  {
+   "label": "Regulación inmune",
+   "veredicto": "SIN_EVIDENCIA",
+   "responde_en": 3,
+   "calla_en": 4,
+   "condiciones_evaluadas": 7,
+   "clases_reproducibles": []
+  }
+ ],
+ "certificacion": {
+  "veredicto": "CERTIFICADO_PARA_LANZAMIENTO",
+  "criterios": [
+   {
+    "criterio": "compuerta verde",
+    "cumple": true
+   },
+   {
+    "criterio": "recursos declarados y presentes",
+    "cumple": true
+   },
+   {
+    "criterio": "entrega real completa",
+    "cumple": true
+   },
+   {
+    "criterio": "cada llamada es auditable",
+    "cumple": true
+   },
+   {
+    "criterio": "detecta subidas Y bajadas",
+    "cumple": true
+   },
+   {
+    "criterio": "especificidad medida y publicada",
+    "cumple": true
+   },
+   {
+    "criterio": "los limites van primero",
+    "cumple": true
+   },
+   {
+    "criterio": "los negativos estan publicados",
+    "cumple": true
+   },
+   {
+    "criterio": "corrida trazable",
+    "cumple": true
+   }
+  ],
+  "trl": {
+   "rubrica": "deeptech-validation-toolkit/references/rubrica-trl.md",
+   "uso_declarado": "tamizaje que orienta (docs/00_GOBIERNO/11_PROPOSITO_DE_TAMIZAJE.md)",
+   "componentes": [
+    {
+     "componente": "ingesta y cuantificacion de una entrega real",
+     "trl": 6,
+     "evidencia": "entrega de cliente real procesada punta a punta, reproducible, con compuerta y procedencia por artefacto"
+    },
+    {
+     "componente": "desviacion contra referencia, con su especificidad",
+     "trl": 6,
+     "evidencia": "nulo medido por nivel de evidencia y publicado con cada corrida; el perfil real supera su propio nulo"
+    },
+    {
+     "componente": "composicion celular",
+     "trl": 5,
+     "evidencia": "contrastada contra DOS atlas independientes; no demostrada en condiciones de uso continuo"
+    },
+    {
+     "componente": "modulos -> proceso biologico",
+     "trl": 3,
+     "evidencia": "validacion PRE-REGISTRADA corrida sobre 8 condiciones y FALLIDA: un modulo encendido no identifica su proceso (doc 59). La capa existe y esta etiquetada como tal"
+    },
+    {
+     "componente": "etapa / temporalidad",
+     "trl": 2,
+     "evidencia": "medida y NO encontrada sobre 5 ejes y 3 disenos; toda la senal aparente era orden de procesamiento (doc 60)"
+    }
+   ],
+   "trl_del_nucleo": 6,
+   "nota": "El nucleo --- lo que sostiene la propuesta de valor declarada--- esta en 6. Las capas de modulo y etapa estan por debajo y el producto lo dice: no se presentan como si hicieran lo que su nombre sugiere. Sumar un TRL unico ocultaria justo eso."
+  }
+ }
+}
