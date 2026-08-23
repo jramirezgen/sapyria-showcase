@@ -1,7 +1,50 @@
-import Link from "next/link";
-import { Brand } from "@/components/brand";
+import type { Metadata } from "next";
+import { Card, Eyebrow, Nota, Shell } from "@/components/ui/primitives";
 import { AuthForm } from "@/components/auth-form";
 
+export const metadata: Metadata = {
+  title: "Entrar",
+  description: "Espacio privado de demostración de Sapyria.",
+};
+
 export default function LoginPage() {
-  return <main className="auth-page"><nav className="nav shell"><Brand /><Link href="/" className="text-link">← Volver al inicio</Link></nav><section className="auth-layout shell"><div><p className="section-label">ESPACIO PERSONAL</p><h1>Tu muestra,<br /><em>en contexto.</em></h1><p>Accede a una demostración privada de cómo Sapyria comunica una lectura molecular con su evidencia y sus limitaciones.</p><ul><li>Seguimiento claro de la muestra</li><li>Fenotipo molecular inferido</li><li>Sin resultados clínicos reales</li></ul></div><AuthForm /></section></main>;
+  return (
+    <Shell className="py-14 sm:py-20">
+      <div className="grid gap-12 lg:grid-cols-[1.05fr_1fr] lg:items-start">
+        <div>
+          <Eyebrow>Espacio personal</Eyebrow>
+          <h1 className="balance text-4xl font-extrabold leading-[1.05] tracking-[-0.04em] sm:text-5xl">
+            Tu muestra,<br />en contexto.
+          </h1>
+          <p className="ink-2 mt-6 max-w-lg text-lg leading-relaxed pretty">
+            Una demostración privada de cómo Sapyria comunica una lectura molecular
+            con su evidencia y sus limitaciones.
+          </p>
+          <ul className="ink-2 mt-6 space-y-2.5 text-sm">
+            {[
+              "Seguimiento del estado de la muestra",
+              "El fenotipo en seis dimensiones, con su nivel de evidencia",
+              "Los límites, antes que los resultados",
+            ].map((x) => (
+              <li key={x} className="flex gap-2.5">
+                <i aria-hidden className="mt-1.5 size-1.5 shrink-0 rounded-full"
+                   style={{ background: "var(--accent)" }} />
+                {x}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 max-w-lg">
+            <Nota tono="aviso">
+              <strong>La muestra de este espacio es sintética</strong> y lleva un código{" "}
+              <span className="font-mono">DEMO-####</span> que no se puede confundir con
+              un caso real. Sapyria no publica resultados clínicos en esta web.
+            </Nota>
+          </div>
+        </div>
+        <Card className="lg:sticky lg:top-24">
+          <AuthForm />
+        </Card>
+      </div>
+    </Shell>
+  );
 }
