@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { mensajeHumano } from "@/lib/auth-messages";
 
 /**
  * El único punto donde un código de Supabase se convierte en sesión.
@@ -19,7 +20,7 @@ function destinoSeguro(raw: string | null): string {
 }
 
 function aLogin(origin: string, motivo: string) {
-  return NextResponse.redirect(new URL(`/login?auth_error=${encodeURIComponent(motivo)}`, origin));
+  return NextResponse.redirect(new URL(`/login?auth_error=${encodeURIComponent(mensajeHumano(motivo))}`, origin));
 }
 
 export async function GET(request: Request) {

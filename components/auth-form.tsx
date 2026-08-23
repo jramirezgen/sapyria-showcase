@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import { ArrowRight, LoaderCircle } from "lucide-react";
 import { createSupabaseBrowserClient, isSupabaseConfigured } from "@/lib/supabase";
 import { urlDeRetorno } from "@/lib/site";
+import { mensajeHumano } from "@/lib/auth-messages";
 
 /**
  * El formulario de acceso.
@@ -37,7 +38,7 @@ export function AuthForm({ avisoInicial = null }: { avisoInicial?: string | null
           options: { data: { full_name: fullName }, emailRedirectTo: urlDeRetorno() },
         });
     setLoading(false);
-    if (result.error) return setMessage(result.error.message);
+    if (result.error) return setMessage(mensajeHumano(result.error.message));
     if (mode === "login") return window.location.assign("/dashboard");
     // Con un correo ya registrado, Supabase devuelve un usuario SIN identidades
     // en vez de un error --- para no delatar quién tiene cuenta. Sin distinguirlo,
@@ -56,7 +57,7 @@ export function AuthForm({ avisoInicial = null }: { avisoInicial?: string | null
       provider: "google",
       options: { redirectTo: urlDeRetorno() },
     });
-    if (error) { setLoading(false); setMessage(error.message); }
+    if (error) { setLoading(false); setMessage(mensajeHumano(error.message)); }
   }
 
   const campo =
