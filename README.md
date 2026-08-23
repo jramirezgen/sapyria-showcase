@@ -56,8 +56,12 @@ limitaciones como capas distintas.
 
 ## Configuración de Supabase
 
-1. En el SQL Editor del proyecto `Sapyria_platform`, ejecute
-   [`supabase/001_product_demo.sql`](supabase/001_product_demo.sql).
+1. En el SQL Editor del proyecto `Sapyria_platform`, ejecute **en orden**
+   [`supabase/001_product_demo.sql`](supabase/001_product_demo.sql) y después
+   [`supabase/002_demo_sample_code.sql`](supabase/002_demo_sample_code.sql).
+   La segunda es obligatoria: `001` exige códigos con el formato `SPY-####-####`,
+   que es el de los casos clínicos **reales**, y `002` los pasa a `DEMO-####`
+   para que una muestra sintética no se pueda confundir con una real.
 2. En Authentication, habilite Google y Email. Para Google, agregue estas URLs
    de redirección:
 
