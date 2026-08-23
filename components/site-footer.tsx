@@ -25,6 +25,7 @@ export function SiteFooter() {
           <ul className="ink-2 space-y-2">
             <li><Link href="/evidencia">Evidencia y límites</Link></li>
             <li><Link href="/sobre">Sobre Sapyria</Link></li>
+            <li><Link href="/privacidad">Privacidad</Link></li>
             <li><a href="mailto:hola@sapyria.com">hola@sapyria.com</a></li>
           </ul>
         </div>

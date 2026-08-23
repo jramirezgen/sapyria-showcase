@@ -140,7 +140,8 @@ const estiloCampo = { borderColor: "var(--border-strong)", background: "var(--su
 
       <p className="ink-3 mt-4 text-xs leading-relaxed pretty">
         Al continuar, confirmas que este entorno es una demostración de producto y no
-        brinda diagnóstico clínico.
+        brinda diagnóstico clínico. Guardamos tu correo y tu nombre, nada más:{" "}
+        <a href="/privacidad" className="underline">cómo tratamos tus datos</a>.
       </p>
     </div>
   );

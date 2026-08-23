@@ -68,7 +68,11 @@ export default async function CohortePage({ params }: { params: Promise<{ cohort
             <StatTile
               valor={de.significativos.toLocaleString("es")}
               etiqueta="Con señal"
-              tono={haySenal ? COLOR_CLASE[c.clase] : "var(--ink-3)"}
+              // El acento de MARCA, no el color de serie de la clase. Una cifra
+              // es texto: lleva token de tinta o de marca. El color de serie
+              // codifica datos en un gráfico, y la identidad de la clase ya la
+              // aporta la marca de color de la cabecera --- no la cifra.
+              tono={haySenal ? "var(--accent)" : "var(--ink-3)"}
               nota={haySenal ? `${((de.fraccion_significativa ?? 0) * 100).toFixed(1)} % del universo` : "Ninguno supera la corrección"}
             />
             <StatTile valor={de.al_alza.toLocaleString("es")} etiqueta="Al alza" />
