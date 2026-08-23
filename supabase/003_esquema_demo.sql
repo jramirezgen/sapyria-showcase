@@ -71,6 +71,30 @@ create policy "users can update their own profile"
 create policy "users can read their own samples"
   on public.samples for select to authenticated using (user_id = auth.uid());
 
+-- ── Privilegios de tabla ─────────────────────────────────────────────────────
+-- RLS y GRANT son DOS compuertas distintas y hay que pasar las dos: una política
+-- que te autoriza no sirve de nada si el rol no tiene permiso sobre la tabla.
+--
+-- Medido el 2026-08-23: Supabase ya concede lo suyo a `authenticated` por
+-- privilegios por defecto —el camino del usuario funciona—, pero **`service_role`
+-- se queda fuera**: `42501 permission denied for table profiles`. Eso no afecta a
+-- la web, que nunca usa la clave de servicio, pero deja ciega cualquier
+-- herramienta de auditoría o soporte del lado servidor.
+--
+-- Se declaran explícitamente los tres roles en vez de confiar en los privilegios
+-- por defecto: dependen de qué rol creó la tabla, y eso cambia según se aplique
+-- por el SQL Editor, por la CLI o por una conexión directa.
+grant usage on schema public to anon, authenticated, service_role;
+
+grant select on public.profiles to authenticated, service_role;
+grant update on public.profiles to authenticated;              -- hay política de UPDATE
+grant select on public.samples  to authenticated, service_role;
+
+-- Deliberadamente NO se concede insert/update/delete sobre `samples` a nadie que
+-- venga del navegador. La muestra nace ÚNICAMENTE dentro de la función
+-- `security definer`, atada a `auth.uid()`: es lo que impide que un cliente se
+-- fabrique muestras o toque las de otro. Esa frontera no se relaja.
+
 -- ── El perfil se crea con la cuenta ──────────────────────────────────────────
 -- `full_name` viene del formulario; con Google llega como `name`. Se aceptan los
 -- dos porque los dos proveedores están activos.
@@ -140,3 +164,12 @@ end;
 $$;
 
 grant execute on function public.claim_demo_sample() to authenticated;
+
+-- ── Comprobación ─────────────────────────────────────────────────────────────
+-- Las cinco filas deben decir `true`. Si alguna sale `false`, algo no se aplicó.
+select 'tabla profiles'        as comprueba, to_regclass('public.profiles')            is not null as ok
+union all select 'tabla samples',            to_regclass('public.samples')             is not null
+union all select 'funcion claim_demo_sample',to_regprocedure('public.claim_demo_sample()') is not null
+union all select 'trigger de perfil',        exists(select 1 from pg_trigger where tgname = 'on_auth_user_created')
+union all select 'authenticated puede leer samples',
+                 has_table_privilege('authenticated', 'public.samples', 'SELECT');

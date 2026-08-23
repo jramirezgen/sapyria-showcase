@@ -177,3 +177,65 @@ curl -s -o /dev/null -w '%{http_code}\n' -X POST \
   -H "apikey: $NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY" \
   -H 'Content-Type: application/json' -d '{}'
 ```
+
+---
+
+# Flujo completo verificado — 2026-08-23
+
+Con `003_esquema_demo.sql` ya aplicada. Ejecutable en cualquier momento:
+
+```bash
+python3 scripts/prueba_flujo_completo.py \
+  --url https://<ref>.supabase.co \
+  --publishable-file <ruta> --secret-file <ruta>
+```
+
+Crea una cuenta de prueba, recorre el flujo y **la borra en un `finally`** — la
+primera versión murió a mitad y dejó una cuenta viva en producción.
+
+## Resultado
+
+| Paso | Resultado |
+| --- | --- |
+| alta de cuenta | ✅ |
+| login (`/auth/v1/token`, el endpoint del formulario) | ✅ devuelve sesión |
+| **el trigger crea el perfil** | ✅ con el `full_name` del formulario |
+| `claim_demo_sample()` con el JWT del usuario | ✅ asigna, y es **idempotente** |
+| la fila leída **por el propio usuario vía RLS** | ✅ `DEMO-4969` · `ready` · `is_demo` · `user_id` correcto |
+| aislamiento | ✅ ve **una** fila: la suya |
+
+> El perfil y la muestra se comprueban **con el JWT del usuario**, no con la clave
+> de servicio. Es el camino que recorre la web, y el único que decide si el flujo
+> funciona.
+
+## Lo que hay que saber: `auth.uid()` sólo existe si hay sesión
+
+`select public.claim_demo_sample();` en el SQL Editor devuelve
+**`23502 null value in column "user_id"`**. Es correcto y no prueba nada: sin
+sesión no hay `auth.uid()`. Desde fuera, el mismo caso se ve como un **400** en
+la RPC anónima. Por eso esta prueba autentica de verdad antes de llamar.
+
+## RLS ≠ GRANT
+
+Son **dos compuertas** y hay que pasar las dos: una política que te autoriza no
+sirve si el rol no tiene permiso sobre la tabla.
+
+Medido aquí: `authenticated` ya tenía lo suyo por privilegios por defecto de
+Supabase —de ahí que el camino del usuario funcione—, pero **`service_role` se
+queda fuera** con `42501 permission denied`. **No afecta a la web**, que nunca usa
+la clave de servicio; sí deja ciega cualquier herramienta de auditoría o soporte.
+
+`003` ahora declara los tres roles explícitamente, en vez de confiar en unos
+privilegios por defecto que dependen de qué rol creó la tabla —y eso cambia según
+se aplique por el SQL Editor, por la CLI o por conexión directa—.
+
+> **Pendiente:** volver a pegar `003_esquema_demo.sql` (es idempotente) para que
+> entren los `GRANT`. Hasta entonces, la única comprobación en rojo es la del
+> borrado en cascada, que necesita leer con la clave de servicio.
+
+## El panel, sin muestra real
+
+Si no hay muestra asignada, el panel **no muestra fenotipo, ni conjuntos, ni
+evidencia** — ni siquiera de demostración. Explica qué falta y ofrece la demo
+pública, que sí tiene datos reales. Una lectura sin muestra detrás no es una
+lectura, y no se enseña como si lo fuera.

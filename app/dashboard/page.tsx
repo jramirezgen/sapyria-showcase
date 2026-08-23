@@ -87,22 +87,35 @@ export default async function DashboardPage() {
       </div>
 
       {aprovisionada ? null : (
-        <div className="mt-6">
+        <div className="mt-8 grid gap-4">
           <Nota tono="aviso">
             <strong>Tu espacio todavía no tiene muestra asignada.</strong>
             <p className="mt-1.5">
-              La sesión es válida y la cuenta existe: lo que falta es el aprovisionamiento
-              en la base de datos. Lo de abajo es contenido de demostración fijo —no
-              procede de ninguna muestra tuya— y lo dejamos visible para que veas la
-              forma del informe.
+              La sesión es válida y tu cuenta existe: lo que falta es el aprovisionamiento.
+              Hasta que haya una muestra tuya <strong>no mostramos ningún fenotipo</strong>,
+              ni conjuntos ni evidencia — ni siquiera de demostración. Una lectura sin
+              muestra detrás no es una lectura, y aquí no se enseña como si lo fuera.
             </p>
             {fallo ? (
               <p className="ink-3 mt-2 font-mono text-xs">Detalle técnico: {fallo.message}</p>
             ) : null}
           </Nota>
+          <Card>
+            <h2 className="text-base font-bold">Mientras tanto</h2>
+            <p className="ink-2 mt-2 text-sm leading-relaxed pretty">
+              La demo pública sí tiene datos reales: ocho cohortes de acceso abierto
+              procesadas por el mismo pipeline, con sus cifras y figuras.
+            </p>
+            <Link href="/demo" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold"
+                  style={{ color: "var(--accent)" }}>
+              Abrir la demo pública <ArrowRight size={15} />
+            </Link>
+          </Card>
         </div>
       )}
 
+      {aprovisionada ? (
+        <>
       <ol className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-4">
         {PASOS.map((paso, i) => {
           const hecho = alcanzado >= 0 && i <= alcanzado;
@@ -200,6 +213,9 @@ export default async function DashboardPage() {
           </Link>
         </Card>
       </section>
+        </>
+      ) : null}
+
     </Shell>
   );
 }
