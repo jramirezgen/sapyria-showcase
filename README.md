@@ -19,6 +19,28 @@ resultados resumidos, pero nunca datos ómicos primarios, identificadores reales
 ni secretos. La decisión y el mapa completo quedan registrados en la LLM Wiki:
 [[Sapyria - Fronteras Canónicas de Repositorios y Despliegue]].
 
+## De dónde salen los datos que muestra
+
+**Ninguna cifra de esta web se escribe a mano.** `public/showcase/` lo genera
+`scripts/export_public_showcase.py` del repositorio `smallrna-clinical-pipeline`,
+leyendo los artefactos reales de ocho cohortes públicas ya procesadas por el
+pipeline. Para regenerarlo:
+
+```bash
+cd ../smallrna-clinical-pipeline
+python3 scripts/export_public_showcase.py --out ../sapyria-showcase/public/showcase
+```
+
+Ese exportador **comprueba la frontera antes de escribir**: falla si en la salida
+aparece un identificador de caso clínico (`SPY-####-####`) o una ruta interna. Sin
+esa comprobación, la frontera que este README declara sería sólo una intención.
+
+> Antes de agosto de 2026 esta web mostraba datos **inventados** —conjuntos
+> moleculares con puntajes fabricados— que además contradecían lo que el pipeline
+> había medido: **un conjunto encendido no identifica su proceso**. Y usaba el
+> identificador de un caso clínico real como código de demo. Las dos cosas están
+> corregidas y hay una comprobación que impide que vuelvan.
+
 ## Arquitectura
 
 | Capa | Uso |

@@ -1,0 +1,158 @@
+{
+ "id": "GSE140069",
+ "clase": "neurodegenerativa",
+ "titulo": "Creutzfeldt-Jakob esporádica",
+ "contraste": "sCJD vs control",
+ "resumen": "Enfermedad priónica rápidamente progresiva.",
+ "expresion_diferencial": {
+  "universo": 865,
+  "significativos": 89,
+  "fraccion_significativa": 0.1029,
+  "al_alza": 77,
+  "a_la_baja": 12,
+  "top": [
+   {
+    "id": "hsa-miR-500a-3p",
+    "efecto": 6.225,
+    "q": 5.79e-06,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-29c-3p",
+    "efecto": 5.77,
+    "q": 0.000774,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-144-3p",
+    "efecto": 5.723,
+    "q": 0.00294,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-454-3p",
+    "efecto": 5.379,
+    "q": 0.00116,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-29a-3p",
+    "efecto": 5.232,
+    "q": 0.00134,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-20a-5p",
+    "efecto": 5.142,
+    "q": 0.00142,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-502-3p",
+    "efecto": 4.84,
+    "q": 0.00121,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-106b-5p",
+    "efecto": 4.757,
+    "q": 0.00298,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-126-5p",
+    "efecto": 4.727,
+    "q": 0.016,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-340-5p",
+    "efecto": 4.662,
+    "q": 0.00818,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-181c-5p",
+    "efecto": 4.476,
+    "q": 0.00721,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-660-5p",
+    "efecto": 4.384,
+    "q": 0.016,
+    "direccion": "INCREASED"
+   }
+  ]
+ },
+ "modulos": [
+  {
+   "modulo": "Estrés celular",
+   "responde": true,
+   "p": 0.0,
+   "percentil_vs_sorteados": 100.0,
+   "miembros": 170,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Reparación y remodelado",
+   "responde": true,
+   "p": 1e-05,
+   "percentil_vs_sorteados": 100.0,
+   "miembros": 156,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Inflamación aguda",
+   "responde": true,
+   "p": 0.00025,
+   "percentil_vs_sorteados": 100.0,
+   "miembros": 157,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Regulación inmune",
+   "responde": true,
+   "p": 0.00919,
+   "percentil_vs_sorteados": 98.0,
+   "miembros": 50,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 3,
+   "de_condiciones": 7
+  },
+  {
+   "modulo": "Metabolismo",
+   "responde": true,
+   "p": 0.01171,
+   "percentil_vs_sorteados": 100.0,
+   "miembros": 31,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 2,
+   "de_condiciones": 7
+  }
+ ],
+ "figuras": [
+  {
+   "archivo": "figures/GSE140069/abundance_heatmap.png",
+   "tipo": "abundance"
+  },
+  {
+   "archivo": "figures/GSE140069/pca_samples.png",
+   "tipo": "pca"
+  },
+  {
+   "archivo": "figures/GSE140069/reference_group_stability.png",
+   "tipo": "reference"
+  },
+  {
+   "archivo": "figures/GSE140069/volcano_Control_vs_sCJD.png",
+   "tipo": "volcano"
+  }
+ ]
+}

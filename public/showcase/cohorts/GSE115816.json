@@ -1,0 +1,158 @@
+{
+ "id": "GSE115816",
+ "clase": "inmune",
+ "titulo": "Rechazo de injerto renal",
+ "contraste": "rechazo vs función estable",
+ "resumen": "Trasplantados bajo inmunosupresión, con y sin rechazo.",
+ "expresion_diferencial": {
+  "universo": 703,
+  "significativos": 2,
+  "fraccion_significativa": 0.0028,
+  "al_alza": 0,
+  "a_la_baja": 2,
+  "top": [
+   {
+    "id": "hsa-miR-144-5p",
+    "efecto": -2.737,
+    "q": 0.195,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-15a-5p",
+    "efecto": -2.451,
+    "q": 0.195,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-96-5p",
+    "efecto": -2.373,
+    "q": 0.396,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-101-3p",
+    "efecto": -2.284,
+    "q": 0.195,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-126-5p",
+    "efecto": -2.208,
+    "q": 0.25,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-16-5p",
+    "efecto": -2.113,
+    "q": 0.195,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-27b-3p",
+    "efecto": -1.819,
+    "q": 0.195,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-21-5p",
+    "efecto": -1.809,
+    "q": 0.195,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-15b-5p",
+    "efecto": -1.8,
+    "q": 0.195,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-144-3p",
+    "efecto": -1.671,
+    "q": 0.348,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-143-3p",
+    "efecto": -1.615,
+    "q": 0.195,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-183-5p",
+    "efecto": -1.545,
+    "q": 0.304,
+    "direccion": "DECREASED"
+   }
+  ]
+ },
+ "modulos": [
+  {
+   "modulo": "Inflamación aguda",
+   "responde": true,
+   "p": 0.0,
+   "percentil_vs_sorteados": 100.0,
+   "miembros": 147,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Estrés celular",
+   "responde": true,
+   "p": 0.0,
+   "percentil_vs_sorteados": 100.0,
+   "miembros": 162,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Reparación y remodelado",
+   "responde": true,
+   "p": 0.0,
+   "percentil_vs_sorteados": 100.0,
+   "miembros": 147,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Regulación inmune",
+   "responde": true,
+   "p": 0.0,
+   "percentil_vs_sorteados": 100.0,
+   "miembros": 48,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 3,
+   "de_condiciones": 7
+  },
+  {
+   "modulo": "Metabolismo",
+   "responde": true,
+   "p": 1e-05,
+   "percentil_vs_sorteados": 100.0,
+   "miembros": 30,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 2,
+   "de_condiciones": 7
+  }
+ ],
+ "figuras": [
+  {
+   "archivo": "figures/GSE115816/abundance_heatmap.png",
+   "tipo": "abundance"
+  },
+  {
+   "archivo": "figures/GSE115816/pca_samples.png",
+   "tipo": "pca"
+  },
+  {
+   "archivo": "figures/GSE115816/reference_group_stability.png",
+   "tipo": "reference"
+  },
+  {
+   "archivo": "figures/GSE115816/volcano_T_cell-mediated_rejection_vs_antibody-mediated_rejection.png",
+   "tipo": "volcano"
+  }
+ ]
+}

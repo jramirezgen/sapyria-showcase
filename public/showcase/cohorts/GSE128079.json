@@ -1,0 +1,158 @@
+{
+ "id": "GSE128079",
+ "clase": "oncológica",
+ "titulo": "Leucemia mieloide aguda",
+ "contraste": "AML vs control",
+ "resumen": "Neoplasia hematológica: la composición celular de la sangre cambia por definición.",
+ "expresion_diferencial": {
+  "universo": 1413,
+  "significativos": 0,
+  "fraccion_significativa": 0.0,
+  "al_alza": 0,
+  "a_la_baja": 0,
+  "top": [
+   {
+    "id": "hsa-miR-548ar-3p",
+    "efecto": 3.795,
+    "q": 0.993,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-6503-3p",
+    "efecto": -3.005,
+    "q": 0.993,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-181a-3p",
+    "efecto": 2.832,
+    "q": 0.993,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-378d",
+    "efecto": 2.775,
+    "q": 0.993,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-4460",
+    "efecto": 2.731,
+    "q": 0.993,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-548v",
+    "efecto": 2.646,
+    "q": 0.993,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-1288-3p",
+    "efecto": 2.579,
+    "q": 0.993,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-204-5p",
+    "efecto": -2.551,
+    "q": 0.993,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-665",
+    "efecto": 2.536,
+    "q": 0.993,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-4450",
+    "efecto": 2.481,
+    "q": 0.993,
+    "direccion": "INCREASED"
+   },
+   {
+    "id": "hsa-miR-485-3p",
+    "efecto": -2.471,
+    "q": 0.993,
+    "direccion": "DECREASED"
+   },
+   {
+    "id": "hsa-miR-6727-5p",
+    "efecto": 2.417,
+    "q": 0.993,
+    "direccion": "INCREASED"
+   }
+  ]
+ },
+ "modulos": [
+  {
+   "modulo": "Regulación inmune",
+   "responde": false,
+   "p": 0.10029,
+   "percentil_vs_sorteados": 92.0,
+   "miembros": 54,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 3,
+   "de_condiciones": 7
+  },
+  {
+   "modulo": "Estrés celular",
+   "responde": false,
+   "p": 0.56386,
+   "percentil_vs_sorteados": 30.0,
+   "miembros": 192,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Reparación y remodelado",
+   "responde": false,
+   "p": 0.62432,
+   "percentil_vs_sorteados": 38.0,
+   "miembros": 174,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Inflamación aguda",
+   "responde": false,
+   "p": 0.75364,
+   "percentil_vs_sorteados": 24.0,
+   "miembros": 173,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 4,
+   "de_condiciones": 8
+  },
+  {
+   "modulo": "Metabolismo",
+   "responde": false,
+   "p": 0.97256,
+   "percentil_vs_sorteados": 0.0,
+   "miembros": 34,
+   "veredicto_global": "SIN_EVIDENCIA",
+   "responde_en": 2,
+   "de_condiciones": 7
+  }
+ ],
+ "figuras": [
+  {
+   "archivo": "figures/GSE128079/abundance_heatmap.png",
+   "tipo": "abundance"
+  },
+  {
+   "archivo": "figures/GSE128079/pca_samples.png",
+   "tipo": "pca"
+  },
+  {
+   "archivo": "figures/GSE128079/reference_group_stability.png",
+   "tipo": "reference"
+  },
+  {
+   "archivo": "figures/GSE128079/volcano_AML_vs_control.png",
+   "tipo": "volcano"
+  }
+ ]
+}
