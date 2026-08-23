@@ -239,3 +239,32 @@ Si no hay muestra asignada, el panel **no muestra fenotipo, ni conjuntos, ni
 evidencia** — ni siquiera de demostración. Explica qué falta y ofrece la demo
 pública, que sí tiene datos reales. Una lectura sin muestra detrás no es una
 lectura, y no se enseña como si lo fuera.
+
+## El panel, comprobado contra el dominio
+
+No basta con probar Supabase: había que ver qué devuelve **Next.js en
+producción**. Se hace entrando de verdad — creando una cuenta, obteniendo sesión
+y montando la cookie `sb-<ref>-auth-token` que usa `@supabase/ssr`— y leyendo el
+HTML de `https://www.sapyria.com/dashboard`.
+
+Resultado (cuenta borrada al terminar):
+
+```
+GET /dashboard  HTTP 200
+✅ muestra DEMO-6902 · no es el falso DEMO-0000 · no redirigió a /login
+✅ fenotipo · conjuntos · evidencia · límites · rotulado MUESTRA SINTÉTICA
+✅ la cadena de estado marca el paso actual (aria-current="step")
+```
+
+> ⚠️ **Lo que NO se pudo probar en vivo:** la rama de «sin muestra asignada». Es
+> código defensivo para un estado que, ahora que el aprovisionamiento funciona, ya
+> no ocurre — todo usuario autenticado recibe su muestra en la primera visita.
+> Verificado por compilación y por lectura, no contra producción.
+
+### Cuidado al verificar un despliegue
+
+Un intento anterior buscó texto del panel en el *bundle* de JavaScript y concluyó
+«tiempo agotado». Era la comprobación la que estaba mal: `app/dashboard/page.tsx`
+es un **componente de servidor** y su texto nunca llega al navegador. Para
+verificar una página tras autenticación hay que **pedirla con sesión**, no
+buscarla en los estáticos.
