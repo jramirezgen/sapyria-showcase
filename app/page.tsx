@@ -34,6 +34,7 @@ export default async function Home() {
           <div className="mt-8 flex flex-wrap gap-3">
             <PrimaryLink href="/demo">Ver la demo con datos reales <ArrowRight size={16} /></PrimaryLink>
             <GhostLink href="/como-funciona">Cómo funciona</GhostLink>
+            <GhostLink href="/contacto">Hablar con Sapyria</GhostLink>
           </div>
 
         </div>
@@ -207,6 +208,7 @@ export default async function Home() {
             <H2>Una muestra.<br />Muchas preguntas bien planteadas.</H2>
             <div className="mt-7 flex flex-wrap gap-3">
               <PrimaryLink href="/demo">Abrir la demo <ArrowRight size={16} /></PrimaryLink>
+              <GhostLink href="/contacto">Quiero conocer Sapyria</GhostLink>
               <GhostLink href="/login">Crear mi espacio</GhostLink>
             </div>
           </div>

@@ -4,7 +4,7 @@ import { Brand } from "@/components/brand";
 export function SiteFooter() {
   return (
     <footer className="border-t py-12" style={{ borderColor: "var(--border)" }}>
-      <div className="shell grid gap-8 sm:grid-cols-[1.4fr_1fr_1fr]">
+      <div className="shell grid gap-8 sm:grid-cols-[1.35fr_1fr_1fr_1fr]">
         <div>
           <Brand />
           <p className="ink-2 mt-3 max-w-sm text-sm leading-relaxed pretty">
@@ -27,7 +27,15 @@ export function SiteFooter() {
             <li><Link href="/sobre">Sobre Sapyria</Link></li>
             <li><Link href="/privacidad">Privacidad</Link></li>
             <li><Link href="/terminos">Términos del servicio</Link></li>
-            <li><a href="mailto:hola@sapyria.com">hola@sapyria.com</a></li>
+          </ul>
+        </div>
+        <div className="text-sm">
+          <p className="ink-3 mb-3 font-mono text-[11px] uppercase tracking-[0.14em]">Contacto</p>
+          <ul className="ink-2 space-y-2">
+            <li><Link href="/contacto">Escríbenos</Link></li>
+            <li><a href="mailto:info@sapyria.com">info@sapyria.com</a></li>
+            <li><a href="mailto:ventas@sapyria.com">ventas@sapyria.com</a></li>
+            <li><a href="https://wa.me/51923418089" target="_blank" rel="noreferrer">WhatsApp · Lima</a></li>
           </ul>
         </div>
       </div>

@@ -74,10 +74,10 @@ export default function Sobre() {
           Si trabajas con cohortes propias o quieres entender si esto encaja en tu
           proceso, escríbenos.
         </p>
-        <a href="mailto:hola@sapyria.com"
+        <a href="mailto:info@sapyria.com"
            className="btn-marca mt-6 inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-colors"
            style={{ background: "var(--accent)" }}>
-          hola@sapyria.com
+          info@sapyria.com
         </a>
       </Section>
     </>

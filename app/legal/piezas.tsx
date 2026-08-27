@@ -32,8 +32,8 @@ export function DocumentoLegal({
       <div className="mt-14 max-w-3xl border-t pt-6" style={{ borderColor: "var(--border)" }}>
         <p className="ink-3 text-sm leading-relaxed pretty">
           ¿Dudas sobre este documento? Escribe a{" "}
-          <a href="mailto:hola@sapyria.com" className="font-medium" style={{ color: "var(--accent-strong)" }}>
-            hola@sapyria.com
+          <a href="mailto:info@sapyria.com" className="font-medium" style={{ color: "var(--accent-strong)" }}>
+            info@sapyria.com
           </a>
           . También puedes leer{" "}
           <Link href="/privacidad" className="underline">Privacidad</Link> y{" "}

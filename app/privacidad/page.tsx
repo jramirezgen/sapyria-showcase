@@ -43,8 +43,8 @@ export default function PrivacidadPage() {
           <strong>Sapyria</strong>, con domicilio en Lima, Perú, es responsable del
           tratamiento de los datos personales descritos en este documento. Punto de
           contacto para cualquier asunto de privacidad:{" "}
-          <a href="mailto:hola@sapyria.com" className="font-medium"
-             style={{ color: "var(--accent-strong)" }}>hola@sapyria.com</a>.
+          <a href="mailto:info@sapyria.com" className="font-medium"
+             style={{ color: "var(--accent-strong)" }}>info@sapyria.com</a>.
         </p>
       </Clausula>
 
@@ -147,8 +147,8 @@ export default function PrivacidadPage() {
         </p>
         <p>
           Para ejercerlos, escribe a{" "}
-          <a href="mailto:hola@sapyria.com" className="font-medium"
-             style={{ color: "var(--accent-strong)" }}>hola@sapyria.com</a>{" "}
+          <a href="mailto:info@sapyria.com" className="font-medium"
+             style={{ color: "var(--accent-strong)" }}>info@sapyria.com</a>{" "}
           desde la dirección de tu cuenta. Puedes pedir también una copia de lo que
           guardamos de ti, que en el caso de la web es la lista corta de la cláusula 3.
         </p>

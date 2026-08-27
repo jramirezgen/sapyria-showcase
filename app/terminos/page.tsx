@@ -69,8 +69,8 @@ export default function TerminosPage() {
         ]} />
         <p>
           Puedes eliminar tu cuenta cuando quieras escribiendo a{" "}
-          <a href="mailto:hola@sapyria.com" className="font-medium"
-             style={{ color: "var(--accent-strong)" }}>hola@sapyria.com</a>.
+          <a href="mailto:info@sapyria.com" className="font-medium"
+             style={{ color: "var(--accent-strong)" }}>info@sapyria.com</a>.
         </p>
       </Clausula>
 

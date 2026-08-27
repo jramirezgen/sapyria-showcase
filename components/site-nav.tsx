@@ -12,6 +12,7 @@ const ENLACES = [
   ["/demo", "Demo"],
   ["/evidencia", "Evidencia"],
   ["/sobre", "Sobre Sapyria"],
+  ["/contacto", "Contacto"],
 ] as const;
 
 export function SiteNav() {
@@ -44,6 +45,13 @@ export function SiteNav() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <Link
+            href="/contacto"
+            className="hidden rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:bg-[var(--surface-2)] lg:inline-flex"
+            style={{ borderColor: "var(--border)" }}
+          >
+            Hablar con Sapyria
+          </Link>
           <Link
             href="/login"
             className="btn-marca hidden rounded-lg px-4 py-2 text-sm font-semibold transition-colors sm:inline-flex"
@@ -78,6 +86,14 @@ export function SiteNav() {
                 {texto}
               </Link>
             ))}
+            <Link
+              href="/contacto"
+              onClick={() => setAbierto(false)}
+              className="mt-2 rounded-lg border px-4 py-3 text-center text-sm font-semibold"
+              style={{ borderColor: "var(--border)" }}
+            >
+              Hablar con Sapyria
+            </Link>
             <Link
               href="/login"
               onClick={() => setAbierto(false)}
