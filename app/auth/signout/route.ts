@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { createSupabaseRouteClient } from "@/lib/supabase-server";
 
 /**
  * Cerrar sesión de verdad, y que no quede nada.
@@ -28,16 +28,7 @@ export async function POST(request: Request) {
   const store = await cookies();
 
   if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
-      {
-        cookies: {
-          getAll: () => store.getAll(),
-          setAll: (items) => items.forEach(({ name, value, options }) => response.cookies.set(name, value, options)),
-        },
-      },
-    );
+    const supabase = await createSupabaseRouteClient(response);
     await supabase.auth.signOut({ scope: "global" });
   }
 

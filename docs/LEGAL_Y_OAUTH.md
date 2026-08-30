@@ -89,10 +89,14 @@ navegador sin cabeza: seguía diciendo **«Sign in to continue to Claude»**. El
 cambio de marca en Google Auth Platform puede tardar en propagarse, y en algunos
 casos **no se aplica hasta que la verificación avanza**.
 
-Mientras diga «Claude», el botón de Google sigue oculto
-(`GOOGLE_DISPONIBLE = false` en `components/auth-form.tsx`). Para comprobarlo:
+**Confirmado por el fundador el 2026-08-28: ya dice «Sapyria».** El botón de
+Google se reactivó (`GOOGLE_DISPONIBLE = true` en `components/auth-form.tsx`).
+Para volver a comprobarlo si hiciera falta:
 
 ```bash
 # La pantalla NO se ve con curl: Google devuelve un 302 vacío. Hay que renderizar.
 chrome --headless --dump-dom "<URL de /auth/v1/authorize?provider=google&redirect_to=…>"
 ```
+
+Si alguna vez vuelve a aparecer «Claude», poner `GOOGLE_DISPONIBLE = false` de
+nuevo en ese archivo es la única acción necesaria.

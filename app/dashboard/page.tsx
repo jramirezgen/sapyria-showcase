@@ -8,6 +8,7 @@ import { demoResult } from "@/lib/demo";
 import { cohorte, cohortes } from "@/lib/showcase";
 import { isSupabaseConfigured } from "@/lib/supabase";
 import { createSupabaseServerClient } from "@/lib/supabase-server";
+import { mensajeHumano } from "@/lib/auth-messages";
 
 export const dynamic = "force-dynamic";
 // El panel muestra datos de una persona: no puede quedarse en el caché del
@@ -36,12 +37,23 @@ export default async function DashboardPage({
   searchParams: Promise<{ cambiar?: string }>;
 }) {
   const quiereCambiar = (await searchParams).cambiar === "1";
-  if (!isSupabaseConfigured) redirect("/login?error=setup");
+  // `auth_error`, no `error`: es el único parámetro que `/login` sabe leer (lo
+  // pone `/auth/callback` cuando el canje falla). Antes esto mandaba `?error=
+  // setup`, que la página de login nunca revisaba --- un despliegue mal
+  // configurado aterrizaba en un formulario en blanco sin ninguna explicación.
+  if (!isSupabaseConfigured) {
+    redirect(`/login?auth_error=${encodeURIComponent("El espacio privado aún no tiene su conexión configurada.")}`);
+  }
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  await supabase.rpc("claim_demo_sample");
+  // Antes se descartaba `{ error }`: si el aprovisionamiento fallaba (una
+  // migración sin aplicar, un GRANT que falta), la pantalla de bienvenida se
+  // veía IGUAL que la de un usuario nuevo --- exactamente el "indistinguible de
+  // un éxito" que ya pasó una vez con `DEMO-0000` (ver docs/AUTENTICACION.md).
+  const { error: errorAprovisionamiento } = await supabase.rpc("claim_demo_sample");
+  if (errorAprovisionamiento) console.error("claim_demo_sample() falló:", errorAprovisionamiento);
 
   // La lista de perfiles sale del JSON del pipeline, no de la base: es el mismo
   // dato que ya sirve el explorador público y así la pantalla de bienvenida
@@ -75,6 +87,7 @@ export default async function DashboardPage({
             perfiles={disponibles.map((c) => ({ id: c.id, titulo: c.titulo, clase: c.clase }))}
             nombre={nombre}
             yaEligio={Boolean(muestra?.perfil)}
+            avisoInicial={!muestra?.perfil && errorAprovisionamiento ? mensajeHumano(errorAprovisionamiento) : null}
           />
         </div>
       </Shell>

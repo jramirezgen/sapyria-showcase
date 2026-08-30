@@ -45,7 +45,17 @@ evento queda como `skipped` cuando está configurada la clave de servicio.
 ## Operación comercial pendiente
 
 1. Crear o confirmar en Google Workspace los buzones/alias `info@sapyria.com`,
-   `ventas@sapyria.com` y `noreply@sapyria.com`.
+   `ventas@sapyria.com` y `noreply@sapyria.com`. **Actualizado 2026-08-29:** la
+   infraestructura para hacerlo por API ya existe y quedó verificada en modo
+   lectura — cuenta de servicio `sapyria-workspace-agent` con Domain-Wide
+   Delegation, impersonando a `admin@sapyria.com`, scopes
+   `admin.directory.user` y `admin.directory.user.alias` confirmados con
+   `200 OK` contra el Admin SDK real. Solo falta decidir alias vs. buzón
+   propio para `info@`/`ventas@` y autorizar la escritura. Detalle completo en
+   `wiki/EMPRESA/Sapyria - Fronteras Canonicas de Repositorios y Despliegue.md`
+   del vault (sección "Cuentas e infraestructura institucional — 2026-08-29").
+   El JSON de la cuenta de servicio vive fuera de este repo, en
+   `/mnt/f/src/api/api/Sapyria_admin_workspace/`.
 2. Configurar una persona responsable activa en `commercial_owners`. La migración
    deja a Vilma como asignación inicial, pero permite añadir o desactivar
    responsables sin cambiar código.

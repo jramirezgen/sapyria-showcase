@@ -72,6 +72,18 @@ begin
      set perfil = p_cohorte
    where user_id = auth.uid() and is_demo = true
    returning perfil into actualizado;
+
+  -- Si nadie actualizó una fila (no hay `samples` para este usuario todavía,
+  -- por ejemplo porque `claim_demo_sample()` no llegó a correr), el UPDATE no
+  -- falla: simplemente no toca nada y `actualizado` se queda en NULL. Sin este
+  -- `raise`, el RPC volvía `{ error: null }` con éxito aparente y el cliente
+  -- (components/elegir-perfil.tsx) redirigía a /dashboard como si hubiera
+  -- funcionado --- que rebotaba de vuelta al selector de perfil, en bucle y sin
+  -- ninguna explicación.
+  if actualizado is null then
+    raise exception 'no hay una muestra activa para asignar el perfil';
+  end if;
+
   return actualizado;
 end;
 $$;

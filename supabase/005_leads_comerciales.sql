@@ -61,6 +61,18 @@ alter table public.lead_notification_events enable row level security;
 -- pública es la función siguiente, que fija los campos internos en el servidor.
 revoke all on table public.commercial_owners, public.commercial_leads, public.lead_notification_events from anon, authenticated;
 
+-- `service_role` NO recibe privilegios por defecto en este proyecto — medido en
+-- 003_esquema_demo.sql (líneas 78-86): sin este GRANT explícito, cada llamada de
+-- `saveNotification()` (app/api/contacto/route.ts), que autentica como
+-- `service_role` para registrar el estado del aviso por correo, falla con
+-- `42501 permission denied for table lead_notification_events` y el evento de
+-- auditoría se pierde en silencio (el `!response.ok` sólo hace un
+-- `console.error`). `select` en las tres tablas es además lo mínimo para que una
+-- herramienta de soporte o auditoría del lado servidor pueda leerlas.
+grant select on public.commercial_owners to service_role;
+grant select, insert on public.commercial_leads to service_role;
+grant select, insert on public.lead_notification_events to service_role;
+
 create or replace function public.create_commercial_lead(
   p_full_name text,
   p_email text,

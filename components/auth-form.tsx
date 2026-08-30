@@ -7,22 +7,21 @@ import { urlDeRetorno } from "@/lib/site";
 import { mensajeHumano } from "@/lib/auth-messages";
 
 /**
- * ⛔ El acceso con Google está OCULTO a propósito.
+ * El acceso con Google estuvo OCULTO desde el 2026-08-22 hasta el 2026-08-28.
  *
- * La pantalla de consentimiento de Google dice, literalmente, **«Sign in to
- * continue to Claude»**. No sale de este código —no hay ni una mención en el
- * repositorio ni en nada desplegado— sino del cliente OAuth configurado en
- * Supabase, que pertenece a un proyecto de Google Cloud llamado «Claude».
+ * La pantalla de consentimiento de Google decía, literalmente, «Sign in to
+ * continue to Claude» — no por nada de este código, sino porque el cliente
+ * OAuth configurado en Supabase pertenece a un proyecto de Google Cloud
+ * (`claude-502620`) que llevaba ese nombre en su Pantalla de consentimiento
+ * OAuth. Que el acceso de una empresa de genética dijera «continuar en Claude»
+ * destruía la confianza antes de la primera pantalla.
  *
- * Que el acceso de una empresa de genética diga «continuar en Claude» destruye
- * la confianza antes de la primera pantalla, así que el botón no se enseña.
- *
- * **Para volver a encenderlo:** renombrar la aplicación en
- * Google Cloud → Pantalla de consentimiento OAuth → Nombre de la aplicación,
- * comprobar que la pantalla dice «Sapyria», y poner esto en `true`. El resto ya
- * está listo, incluido el selector de cuenta.
+ * Confirmado el 2026-08-28 que la marca ya dice «Sapyria»: se reactiva. Si
+ * alguna vez vuelve a aparecer «Claude» (Google puede revertir un cambio de
+ * marca durante verificación), poner esto en `false` de nuevo es la única
+ * acción necesaria — el resto del flujo no cambia.
  */
-const GOOGLE_DISPONIBLE = false;
+const GOOGLE_DISPONIBLE = true;
 
 /**
  * El formulario de acceso.
@@ -56,7 +55,7 @@ export function AuthForm({ avisoInicial = null }: { avisoInicial?: string | null
           options: { data: { full_name: fullName }, emailRedirectTo: urlDeRetorno() },
         });
     setLoading(false);
-    if (result.error) return setMessage(mensajeHumano(result.error.message));
+    if (result.error) return setMessage(mensajeHumano(result.error));
     if (mode === "login") return window.location.assign("/dashboard");
     // Con un correo ya registrado, Supabase devuelve un usuario SIN identidades
     // en vez de un error --- para no delatar quién tiene cuenta. Sin distinguirlo,
@@ -81,7 +80,7 @@ export function AuthForm({ avisoInicial = null }: { avisoInicial?: string | null
         queryParams: { prompt: "select_account" },
       },
     });
-    if (error) { setLoading(false); setMessage(mensajeHumano(error.message)); }
+    if (error) { setLoading(false); setMessage(mensajeHumano(error)); }
   }
 
   const campo =

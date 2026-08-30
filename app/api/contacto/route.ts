@@ -44,7 +44,16 @@ function escapeHtml(value: string) {
 
 function currentOrigin(request: NextRequest) {
   const configured = process.env.NEXT_PUBLIC_SITE_URL;
-  return configured ? new URL(configured).origin : request.nextUrl.origin;
+  if (!configured) return request.nextUrl.origin;
+  // Un valor mal puesto en Vercel (sin esquema, con una errata) no debe tumbar
+  // el endpoint entero con un 500 sin JSON --- se degrada al origen real de la
+  // petición, igual que cuando la variable no está configurada.
+  try {
+    return new URL(configured).origin;
+  } catch {
+    console.error("NEXT_PUBLIC_SITE_URL no es una URL válida:", configured);
+    return request.nextUrl.origin;
+  }
 }
 
 function isAllowedOrigin(request: NextRequest) {
@@ -155,16 +164,25 @@ export async function POST(request: NextRequest) {
     try { originPage = new URL(referer).pathname.slice(0, 200) || "/contacto"; } catch { /* usa el valor seguro */ }
   }
 
-  const response = await fetch(`${supabaseUrl}/rest/v1/rpc/create_commercial_lead`, {
-    method: "POST",
-    headers: { apikey: publishableKey, Authorization: `Bearer ${publishableKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      p_full_name: lead.nombre, p_email: lead.email, p_phone: lead.telefono, p_city: lead.ciudad,
-      p_country: lead.pais, p_interested_type: lead.tipoInteresado, p_reason: lead.motivo,
-      p_service_interest: lead.servicioInteres || null, p_contact_preference: lead.preferenciaContacto,
-      p_message: lead.mensaje || null, p_origin_page: originPage,
-    }),
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${supabaseUrl}/rest/v1/rpc/create_commercial_lead`, {
+      method: "POST",
+      headers: { apikey: publishableKey, Authorization: `Bearer ${publishableKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        p_full_name: lead.nombre, p_email: lead.email, p_phone: lead.telefono, p_city: lead.ciudad,
+        p_country: lead.pais, p_interested_type: lead.tipoInteresado, p_reason: lead.motivo,
+        p_service_interest: lead.servicioInteres || null, p_contact_preference: lead.preferenciaContacto,
+        p_message: lead.mensaje || null, p_origin_page: originPage,
+      }),
+    });
+  } catch {
+    // Un `fetch` que LANZA (DNS, timeout, TLS) no es lo mismo que un
+    // `!response.ok` de más abajo --- sin este catch, esto salía como un 500
+    // sin cuerpo JSON en vez del error traducido que el formulario espera leer.
+    console.error("No se pudo contactar a Supabase para crear el lead comercial.");
+    return NextResponse.json({ error: "No pudimos registrar tu solicitud. Inténtalo nuevamente." }, { status: 502 });
+  }
   if (!response.ok) {
     console.error("Supabase rechazó la creación de un lead comercial.");
     return NextResponse.json({ error: "No pudimos registrar tu solicitud. Inténtalo nuevamente." }, { status: 502 });

@@ -29,12 +29,20 @@ const DESCRIPCION: Record<string, string> = {
 };
 
 export function ElegirPerfil({
-  perfiles, nombre, yaEligio = false,
-}: { perfiles: PerfilDisponible[]; nombre: string | null; yaEligio?: boolean }) {
+  perfiles, nombre, yaEligio = false, avisoInicial = null,
+}: {
+  perfiles: PerfilDisponible[];
+  nombre: string | null;
+  yaEligio?: boolean;
+  /** Aviso ya traducido que trae el servidor --- por ejemplo si
+   *  `claim_demo_sample()` falló antes de llegar aquí. Sin esto, esa falla se
+   *  veía igual que la pantalla de un usuario nuevo. */
+  avisoInicial?: string | null;
+}) {
   const router = useRouter();
   const [pendiente, empezar] = useTransition();
   const [eligiendo, setEligiendo] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(avisoInicial);
 
   async function elegir(id: string) {
     setEligiendo(id);
@@ -42,7 +50,7 @@ export function ElegirPerfil({
     const { error } = await createSupabaseBrowserClient().rpc("elegir_perfil", { p_cohorte: id });
     if (error) {
       setEligiendo(null);
-      return setError(mensajeHumano(error.message));
+      return setError(mensajeHumano(error));
     }
     empezar(() => { router.replace("/dashboard"); router.refresh(); });
   }
